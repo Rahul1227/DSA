@@ -12,12 +12,33 @@
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
+        // // recursive way
+        // if(root == NULL) return 0;
+
+        // int lt = maxDepth (root ->left);
+        // int rt = maxDepth(root -> right);
+
+        // return 1 + max(lt, rt);
+
+
+        // using BFS
+
         if(root == NULL) return 0;
+        queue<TreeNode*> q;
+        q.push(root);
+        int level = 1;
+        while(!q.empty()){
+            int n = q.size();
+            while (n--){
+                TreeNode* temp = q.front();
+                q.pop();
 
-        int lt = maxDepth (root ->left);
-        int rt = maxDepth(root -> right);
-
-        return 1 + max(lt, rt);
+                if(temp -> left) q.push(temp->left);
+                if(temp -> right) q.push(temp->right);
+            }
+            level++;
+        }
+        return --level;
         
     }
 };
