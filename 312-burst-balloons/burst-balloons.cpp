@@ -1,24 +1,28 @@
 class Solution {
+private:
+    int solve(int l, int r, vector<int> &arr, vector<vector<int>> &dp){
+        if(l>r) return 0;
+
+        if(dp[l][r] != -1) return dp[l][r];
+        int result = INT_MIN;
+
+        for(int ind = l; ind <= r;  ind++){
+            int cost = (arr[ind] * arr[l-1] * arr[r+1]) 
+                         + solve(l, ind-1,arr,dp) 
+                         + solve(ind+1, r, arr, dp);
+
+            result = max(result, cost);
+        }
+
+        return dp[l][r] = result;
+    }
 public:
     int maxCoins(vector<int>& nums) {
-        //including the nums[-1] and nums[n]
-        int n = nums.size() + 2;        
-        vector<vector<int>> dp(n, vector<int>(n));
-        vector<int> new_nums(n, 1);
-        int i = 1;
-        for(auto num : nums) {
-            new_nums[i++] = num;
-        }
-        for(int len = 2; len <= n; len++) { 
-            //iterate from interval length from 2 to n
-            for(int i = 0; i <= n - len; i++) {
-                int j = i + len - 1;
-                //select between left and right boundary (i, j)
-                for(int k = i + 1; k < j; k++) { 
-                    dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + new_nums[i] * new_nums[k] * new_nums[j]);
-                }
-            }
-        }
-        return dp[0][n - 1];
+        nums.push_back(1);
+        nums.insert(nums.begin(),1);
+        int n = nums.size();
+        vector<vector<int>> dp(n+1, vector<int>(n+1, -1));
+        return solve(1, n-2, nums, dp);
+        
     }
 };
