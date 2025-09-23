@@ -38,30 +38,29 @@ public:
         int len = min(len1, len2);
 
         for(int i =0; i<len; i++){
-            if(arr1[i] == arr2[i]) continue;
             if(arr1[i] < arr2[i]){
                 result =-1;
-                break;
+                return result;
 
             } 
             if (arr1[i] > arr2[i]){
                  result = 1;
 
-                 break;
+                return result;
 
             }
         }
 
-        if(result == 0 && len1 > len2){
+        if( len1 > len2){
             int sum = accumulate(arr1.begin()+len2, arr1.end(),0);
             if(sum > 0)  result = 1;
-            cout<<sum<<" ";
+            return result;
         }
 
-        if(result == 0 && len2 > len1){
+        if( len2 > len1){
             int sum = accumulate(arr2.begin()+ len1, arr2.end(),0);
             if(sum > 0) result = -1;
-            // cout<<sum<<" ";
+            return result;
         }
 
 
