@@ -1,32 +1,22 @@
 class Solution {
 private:
-    int solve(TreeNode * root){
+    int solve(TreeNode* root){
         if(!root){
             return 0;
         }
-        int left = solve(root->left);
-        int right = solve(root->right);
-
-        return 1 + max(left, right);  // ✅ return height, not diff
-    }
-
-    void controller(TreeNode * root, int &diff){
-        if(!root) return;
 
         int left = solve(root->left);
+        if(left == -1) return -1;  // subtree unbalanced
+
         int right = solve(root->right);
+        if(right == -1) return -1; // subtree unbalanced
 
-        diff = max(diff, abs(left - right)); // ✅ track the maximum difference
+        if(abs(left - right) > 1) return -1; // current node unbalanced
 
-        // keep checking children
-        controller(root->left, diff);
-        controller(root->right, diff);
+        return max(left, right) + 1; // return height
     }
-    
 public:
     bool isBalanced(TreeNode* root) {
-        int diff = 0;
-        controller(root, diff);
-        return diff <= 1;  // ✅ check final max difference
+        return solve(root) != -1;
     }
 };
