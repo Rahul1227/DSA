@@ -10,24 +10,25 @@
  * };
  */
 class Solution {
-public:
-    int getMaxdepth(TreeNode* node, int &maxDai){
-        if(node == NULL){
+private:
+    int solve(TreeNode* root, int &maxDai){
+        if(!root){
             return 0;
         }
 
-        int lt = getMaxdepth(node -> left, maxDai);
-        int rt = getMaxdepth(node -> right, maxDai);
-        maxDai = max(maxDai, lt+rt);
-        return 1 + max(lt, rt);
+        int left = solve(root->left, maxDai);
+        int right = solve(root->right, maxDai);
+        int currTotal = left + right;
+        if(currTotal > maxDai){
+            maxDai = currTotal;
+        }
+        return max(left, right) + 1;
     }
-
+public:
     int diameterOfBinaryTree(TreeNode* root) {
         int maxDai = 0;
-        getMaxdepth(root, maxDai);
+        solve(root, maxDai);
         return maxDai;
         
-        
-
     }
 };
