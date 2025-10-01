@@ -10,21 +10,30 @@
  * };
  */
 class Solution {
-public:
-    int calculateMaxSum (TreeNode* root, int &maxSum){
-        if(root == NULL) return 0;
+private:
+    int solve(TreeNode* root, int &maxSum){
+        if(!root){
+            return 0;
+        }
 
-        int lt = max(0, calculateMaxSum(root->left,maxSum)); 
-        int rt = max(0,calculateMaxSum(root->right, maxSum));
+        int left = solve(root->left, maxSum);
+        int right = solve(root->right, maxSum);
 
-        maxSum = max(maxSum, lt + rt  + root->val);
+        int sum = left + right + root->val;
+        if(sum > maxSum){
+            maxSum = sum;
+        }
 
-        return root->val + max(lt, rt);
+        return max((max(left, right) + root->val),0);
+        
+
     }
 
+
+public:
     int maxPathSum(TreeNode* root) {
         int maxSum = INT_MIN;
-        calculateMaxSum (root, maxSum);
+        solve(root, maxSum);
         return maxSum;
         
     }
