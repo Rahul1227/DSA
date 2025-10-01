@@ -14,10 +14,10 @@ private:
     int solve(TreeNode * node){
         if(!node) return 0;
 
-        int left = 1 + solve(node->left);
-        int right = 1 + solve(node->right);
+        int left = solve(node->left);
+        int right = solve(node->right);
 
-        return max(left, right);
+        return max(left, right) + 1;
         
     }
 public:
