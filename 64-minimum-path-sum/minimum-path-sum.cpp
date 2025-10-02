@@ -1,17 +1,22 @@
 class Solution {
 private:
     int solve(int i, int j, int n, int m, vector<vector<int>> &dp, vector<vector<int>> & grid){
+        // invalid bound check
+        if(i >= n || j >=  m){
+            return INT_MAX/3;
+        }
+
+        // destination reached
         if(i == n-1 && j == m-1){
             return grid[i][j];
         }
 
+        // checking the dp
         if(dp[i][j] != -1){
             return dp[i][j];
         }
 
-        if(i >= n || j >=  m){
-            return INT_MAX;
-        }
+        
 
         int right = solve(i,j+1,n,m,dp,grid);
         int down = solve(i+1,j,n,m,dp,grid);
