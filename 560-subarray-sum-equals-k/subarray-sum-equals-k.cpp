@@ -1,37 +1,24 @@
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        // brute force 
-        // generating all the subarray and then checking
-        // int n = nums.size();
-        // int result =0;
-
-        // for(int i =0; i<n; i++){
-        //     int sum =0;
-        //     for(int j =i; j<n; j++){
-        //         sum += nums[j];
-        //         if(sum == k) result++;
-
-        //     }
-        // }
-        // return result;
-
-
-
-        // optimal way
-        unordered_map<int,int> hashMap;
+        unordered_map<int,int> mp;
+        mp[0]= 1;
+        int sum = 0;
         int result =0;
-        int sum =0;
-        hashMap[0] = 1;
-        for(auto num: nums){
-            sum += num;
+        int n = nums.size();
+
+        for(int i =0; i<n; i++){
+            sum += nums[i];
             int rem = sum - k;
-            if(hashMap.find(rem) != hashMap.end()){
-                result += hashMap[rem];
+            if(mp.find(rem) != mp.end()){
+                result += mp[rem];
+
+
             }
-            hashMap[sum]++;
 
 
+
+            mp[sum]++; 
         }
         return result;
         
