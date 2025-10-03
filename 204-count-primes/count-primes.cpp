@@ -3,7 +3,7 @@ public:
     int countPrimes(int n) {
         // Sieve of Erathonese
         // precompute the prime
-        vector<int> primes(n+1, 1);
+        vector<int> primes(n, 1);
        
 
         // logic for the precompute
