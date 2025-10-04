@@ -9,7 +9,7 @@ public:
         if(len1 == 0) return true;
         s = s + s;
         
-        return s.find(goal) != -1;
+        return s.find(goal) != string:: npos;
         
     }
 };
