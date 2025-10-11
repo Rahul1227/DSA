@@ -10,13 +10,14 @@ public:
         while(!q.empty()){
             auto [word, level] = q.front();
             q.pop();
+            if(word == endWord) return level;
             for(int i =0; i<word.size(); i++){
                 char iniLetter = word[i];
 
                 for(char c = 'a'; c<='z'; c++){
                     word[i] = c;
                     if(st.find(word) != st.end()){
-                        if(word == endWord) return level+1;
+                       
                         q.push({word, level + 1});
                         st.erase(word);
                     }
