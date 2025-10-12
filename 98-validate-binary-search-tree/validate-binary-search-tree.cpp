@@ -11,26 +11,70 @@
  */
 class Solution {
 private:
-    void getInorder(TreeNode * root, vector<int> &inOrder){
+    // void getInorder(TreeNode * root, vector<int> &inOrder){
+    //     if(!root){
+    //         return;
+    //     }
+    //     getInorder(root->left,inOrder);
+    //     inOrder.push_back(root->val);
+    //     getInorder(root->right,inOrder);
+    // }
+    bool isValid(long long leftRange, TreeNode *root, long long rightRange){
         if(!root){
-            return;
+            return true;
         }
-        getInorder(root->left,inOrder);
-        inOrder.push_back(root->val);
-        getInorder(root->right,inOrder);
+
+        if(leftRange >= root->val || rightRange <= root->val){
+            return false;
+        }
+
+        return isValid(leftRange,root->left,root->val) && isValid(root->val, root->right, rightRange);
+        
     }
+
 public:
     bool isValidBST(TreeNode* root) {
-        vector<int> inOrder;
-        getInorder(root,inOrder);
 
-        int n = inOrder.size();
-        for(int i =1; i<n; i++){
-            if(inOrder[i-1] >= inOrder[i]){
-                return false;
-            }
+        // trying to code the optimal approach
+        if(!isValid(LLONG_MIN,root,LLONG_MAX)){
+            return false;
         }
+
         return true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // vector<int> inOrder;
+        // getInorder(root,inOrder);
+
+        // int n = inOrder.size();
+        // for(int i =1; i<n; i++){
+        //     if(inOrder[i-1] >= inOrder[i]){
+        //         return false;
+        //     }
+        // }
+        // return true;
         
     }
 };
