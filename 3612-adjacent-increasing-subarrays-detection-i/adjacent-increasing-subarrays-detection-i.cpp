@@ -1,7 +1,7 @@
 class Solution {
 private:
     bool isIncreasing(int i, int j, vector<int> &nums){
-        if(i==j) return true;
+        // if(i==j) return true;
         for(int k = i+1; k<=j; k++){
             if(nums[k] <= nums[k-1]){
                 return false;
