@@ -9,17 +9,39 @@
  * };
  */
 class Solution {
+private:
+    ListNode *reverse(ListNode* &prev, ListNode* &curr){
+        if(!curr) return prev;
+        ListNode * next = curr->next;
+        curr->next = prev;
+        return reverse(curr,next);
+
+
+    }
+    
 public:
     ListNode* reverseList(ListNode* head) {
+        //trying the recursive solution
         ListNode * prev = nullptr;
         ListNode * curr = head;
-        while(curr){
-            ListNode * next = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
+        return reverse(prev, curr);
+        
+
+
+
+
+
+
+        //Iterative solution
+        // ListNode * prev = nullptr;
+        // ListNode * curr = head;
+        // while(curr){
+        //     ListNode * next = curr->next;
+        //     curr->next = prev;
+        //     prev = curr;
+        //     curr = next;
+        // }
+        // return prev;
         
     }
 };
