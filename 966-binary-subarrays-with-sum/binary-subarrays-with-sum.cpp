@@ -1,21 +1,22 @@
 class Solution {
 public:
-    int numSubarraysWithSum(vector<int>& nums, int k) {
-        unordered_map<int,int> hashMap;
-        int result =0;
-        int sum =0;
-        hashMap[0] = 1;
-        for(auto num: nums){
-            sum += num;
-            int rem = sum - k;
-            if(hashMap.find(rem) != hashMap.end()){
-                result += hashMap[rem];
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        unordered_map<int,int> mp;
+        mp[0] = 1;
+        int currSum = 0;
+        int ans = 0;
+        for(auto num : nums){
+            currSum += num;
+            int rem = currSum - goal;
+            if(mp.find(rem) != mp.end()){
+                ans += mp[rem];
+
             }
-            hashMap[sum]++;
 
 
+            mp[currSum]++;
         }
-        return result;
+        return ans;
         
     }
 };
