@@ -1,23 +1,22 @@
 class Solution {
 private:
     bool isPossible(int maxTarget, int k, vector<int> &arr){
-        int currPages = 0;
-        int totalStudent = 1;
-        for(int i =0; i<arr.size(); i++){
+        int currSplit = 1;
+        int currSum = 0;
+        for(int i = 0; i<arr.size(); i++){
             if(arr[i] > maxTarget) return false;
-            
-            if(currPages + arr[i] > maxTarget ){
-                currPages = arr[i];
-                totalStudent++;
-                if(totalStudent > k) return false;
+            if(currSum + arr[i] > maxTarget){
+                currSplit++;
+                currSum = arr[i];
+                if(currSplit > k){
+                    return false;
+                }
             }else{
-                currPages +=arr[i];
+                currSum += arr[i];
             }
-            
-           
-            
         }
         return true;
+        
 
     }
 public:
