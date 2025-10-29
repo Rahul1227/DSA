@@ -3,7 +3,7 @@ public:
     int smallestNumber(int n) {
         int counter = 0;
         while(n > 0){
-            n = n >> 1;
+            n = n /2;
             counter++;
 
 
