@@ -1,10 +1,19 @@
 class Solution {
 public:
     int smallestNumber(int n) {
-        vector<int> vec = {1,3,7,15,31,63,127,255,511,1023} ;
-        for(auto it: vec){
-            if(it >= n) return it ;
+        int counter = 0;
+        while(n > 0){
+            n = n >> 1;
+            counter++;
+
+
         }
-        return 0 ;
+        cout<<counter;
+
+        return pow(2,counter)- 1;
+
+
+        
+        
     }
 };
