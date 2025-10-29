@@ -1,18 +1,20 @@
 class Solution {
 private:
-    bool check(int i, int color, vector<int> &colors, vector<vector<int>> &graph){
+    bool check(vector<vector<int>> &graph, int src, vector<int> &color){
         queue<pair<int,int>> q;
-        q.push({i,color});
+        q.push({src,0});
+        color[src] = 0;
         while(!q.empty()){
-            auto [node, col] = q.front();
+            auto [node, col]= q.front();
             q.pop();
 
-            for(auto adjNode : graph[node]){
-                if(colors[adjNode] == -1){
-                    colors[adjNode] = 1-col;
-                    q.push({adjNode, colors[adjNode]});
+            for(auto adjNode :graph[node]){
+                if(color[adjNode] == -1){
+                    int newColor =  1 - col;
+                    color[adjNode] = newColor;
+                    q.push({adjNode, newColor});
                 }else{
-                    if(colors[adjNode] == col){
+                    if(col == color[adjNode]){
                         return false;
                     }
                 }
@@ -22,20 +24,21 @@ private:
         return true;
 
     }
-
 public:
     bool isBipartite(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> colors(n, -1);
-        for(int i =0; i<n; i++){
-            if(colors[i] == -1){
-                if(!check(i,0,colors, graph)){
+        vector<int> color(n,-1);
+        for(int i =0; i< n; i++){
+            if(color[i] == -1){
+                if(!check(graph,i,color)){
                     return false;
                 }
             }
         }
         return true;
-        
+       
 
+
+        
     }
 };
