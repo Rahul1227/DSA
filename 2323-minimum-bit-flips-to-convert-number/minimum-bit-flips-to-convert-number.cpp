@@ -5,9 +5,8 @@ public:
         int result = 0;
         while(xorResult){
             result++;
-            xorResult = xorResult - (xorResult & - xorResult);
+            xorResult -= xorResult & -xorResult;
         }
         return result;
-        
     }
 };
