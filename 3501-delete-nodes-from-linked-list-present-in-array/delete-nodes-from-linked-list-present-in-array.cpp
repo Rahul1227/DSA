@@ -19,35 +19,29 @@ public:
             mp[nums[i]]=1;
         }
 
-        // extracting the node values
-        vector<int> tempStore;
-        ListNode* temp = head;
-        while(temp){
-            int value = temp -> val;
-            tempStore.push_back(value);
-            temp = temp -> next;
-        }
+        // travering through the list
+        ListNode* curr = head;
+        ListNode* prev = NULL;
+        while(curr){
+            if(mp.find(curr->val) != mp.end()){
+                if(curr == head){
+                    head = curr->next;
+                    curr= head;
+                }else{
+                    prev->next = curr->next;
+                    curr = curr->next;
+                }
 
-        vector<int> finalAns;
-        for(auto num: tempStore){
-            if(mp.find(num) == mp.end()){
-                finalAns.push_back(num);
-            }
-        }
-
-        ListNode * head1 = NULL;
-        ListNode * temp1 = NULL;
-        for(int i =0; i< finalAns.size(); i++){
-            ListNode* newNode = new ListNode(finalAns[i]);
-            if(head1 == NULL){
-                head1 = newNode;
-                temp1 = head1;
             }else{
-                temp1 -> next = newNode;
-                temp1 = newNode;
+                prev = curr;
+                curr = curr->next;
             }
+            
         }
-        return head1;
+
+        return head;
+
+        
         
     }
 };
