@@ -1,29 +1,33 @@
 class Solution {
-public:
-    void getCombination(int ind, int n, int target, vector<int>& nums, 
-                        vector<int>& currArray, vector<vector<int>>& finalResult) {
-        if (ind >= n) {
-            if (target == 0) {
-                finalResult.push_back(currArray);
+private:
+    void solve(int ind, int target,int n, vector<int> curr,
+     vector<vector<int>> &ans, vector<int> &nums){
+        if(ind == n){
+            if(target == 0){
+                ans.push_back(curr);
             }
             return;
         }
 
-        // Take the current element (can reuse the same element)
-        if (nums[ind] <= target) {
-            currArray.push_back(nums[ind]);
-            getCombination(ind, n, target - nums[ind], nums, currArray, finalResult);
-            currArray.pop_back(); // backtrack properly here
+        // not take
+        solve(ind+1,target,n,curr,ans,nums);
+
+        // take
+        if(nums[ind] <= target){
+            curr.push_back(nums[ind]);
+            solve(ind, target - nums[ind], n,curr ,ans, nums);
+            curr.pop_back();
         }
-
-        // Not take the current element
-        getCombination(ind + 1, n, target, nums, currArray, finalResult);
-    }
-
+        
+     }
+public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<int> currArray;
-        vector<vector<int>> finalResult;
-        getCombination(0, candidates.size(), target, candidates, currArray, finalResult);
-        return finalResult;
+        vector<vector<int>> ans;
+        vector<int> curr;
+        int n = candidates.size();
+        solve(0,target,n, curr, ans, candidates);
+        return ans;
+        
+
     }
 };
