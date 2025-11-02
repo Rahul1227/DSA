@@ -2,6 +2,12 @@ class Solution {
 private:
     void solve(int ind, int target,int n, vector<int> curr,
      vector<vector<int>> &ans, vector<int> &nums){
+        if(target == 0){
+            ans.push_back(curr);
+            return;
+        }
+
+        
         if(ind == n){
             if(target == 0){
                 ans.push_back(curr);
