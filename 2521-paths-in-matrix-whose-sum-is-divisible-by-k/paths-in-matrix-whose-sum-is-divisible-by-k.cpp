@@ -17,12 +17,12 @@ private:
 
         if(n < 0 || m < 0) return 0;
 
-        if(dp[n][m][currSum % k] != -1) return dp[n][m][currSum % k];
+        if(dp[n][m][currSum] != -1) return dp[n][m][currSum];
 
-        int up = solve(n-1, m, currSum + grid[n][m], dp, grid,k);
-        int left = solve(n, m-1, currSum + grid[n][m], dp, grid,k);
+        int up = solve(n-1, m, (currSum + grid[n][m])%k, dp, grid,k);
+        int left = solve(n, m-1, (currSum + grid[n][m])%k, dp, grid,k);
 
-        return dp[n][m][currSum % k] = (up + left) % MOD;
+        return dp[n][m][currSum] = (up + left) % MOD;
     }
 public:
     int numberOfPaths(vector<vector<int>>& grid, int k) {
