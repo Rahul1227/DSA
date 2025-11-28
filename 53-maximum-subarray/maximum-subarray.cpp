@@ -11,7 +11,7 @@ public:
             maxSum = max(maxSum, currSum);
             if(currSum < 0){
                 currSum = 0;
-                i = j;
+                i = j+1;
             }
             j++;
         }
