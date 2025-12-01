@@ -13,7 +13,7 @@ public:
     long long maxRunTime(int n, vector<int>& batteries) {
         long long left = 1;
         long long ans = 0;
-        long long right = accumulate(batteries.begin(), batteries.end(), 0LL) / n;
+        long long right = accumulate(batteries.begin(), batteries.end(), 0LL);
 ;
         while(left <= right){
             long long mid = left + ((right - left)/2);
