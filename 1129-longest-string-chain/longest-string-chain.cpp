@@ -6,7 +6,7 @@ private:
 
     bool findEach(string longer, string tofind){
         for(int i =0; i<longer.size(); i++){
-            string newS = longer.substr(0,i) + longer.substr(i+1);
+            string newS = longer.substr(0,i) + longer.substr(i+1, longer.size());
             if(newS == tofind){
                 return true;
             }
