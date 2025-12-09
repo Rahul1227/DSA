@@ -35,8 +35,43 @@ private:
 public:
     bool checkValidString(string s) {
         int  n = s.size();
-        vector<vector<int>> dp(n,  vector<int>(n+1, -1));
-        return solve(0, 0, dp, s);
+        vector<vector<bool>> dp(n+1, vector<bool>(n+1));
+        // return solve(0, 0, dp, s);
+
+        // doing with tabulation
+        dp[n][0] = true;
+
+        for(int ind =  n-1; ind>=0; ind--){
+            for(int count =0; count < n; count++){
+                 bool isValid = false;
+
+                if(s[ind] == '('){
+                    isValid =  dp[ind+1][count+1];
+                }else if(s[ind] == ')'){
+                    if(count > 0){
+                         isValid = dp[ind+1][count-1];
+                    }
+                   
+                }else{
+                    bool considerOpen =  dp[ind+1][count+1];
+                    bool considerClose = false;
+                    if(count > 0){
+                        considerClose =  dp[ind+1][count-1];
+                    }
+                    
+                    bool considerNothing = dp[ind+1][count];
+
+                    isValid = considerOpen || considerClose || considerNothing;
+                }
+                dp[ind][count] = isValid;
+
+            }
+        }
+
+        return dp[0][0];
+
+
+
         
     }
 };
