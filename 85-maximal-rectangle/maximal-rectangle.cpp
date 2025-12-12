@@ -2,7 +2,8 @@ class Solution {
 private: 
     int largestRectangleArea(vector<int>& heights) {
         // trying to solve in 1 pass;
-        int maxArea = INT_MIN;
+        heights.push_back(0); // for removing the outer while loop
+        int maxArea = 0;
         int n = heights.size();
         stack<int> st;
         st.push(0);
@@ -19,14 +20,14 @@ private:
             st.push(i);
         }
 
-        while(!st.empty()){
-                int currHeight = heights[st.top()];
-                st.pop();
-                int pse = !st.empty() ? st.top() : -1;
-                int nse = n;
-                int currArea = (nse - pse - 1) * currHeight;
-                maxArea = max(currArea, maxArea);
-        }
+        // while(!st.empty()){
+        //         int currHeight = heights[st.top()];
+        //         st.pop();
+        //         int pse = !st.empty() ? st.top() : -1;
+        //         int nse = n;
+        //         int currArea = (nse - pse - 1) * currHeight;
+        //         maxArea = max(currArea, maxArea);
+        // }
         return maxArea;
     }       
 public:
