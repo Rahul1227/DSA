@@ -57,28 +57,21 @@ public:
                         }
                     }
                 } else {
-                    int num = -1;
-
-                    for (char c : ids) {
-                        if (isdigit(c)) {
-                            if (num == -1)
-                                num = 0;                // start new number
-                            num = num * 10 + (c - '0'); // build the number
-                        } else {
-                            if (num != -1) { // we finished reading a number
-                                if (num >= 0 && num < n) {
-                                    mentions[num]++; // ALWAYS count id-mentions
-                                }
-                                num = -1;
+                    vector<int> id;
+                    stringstream idToken(ids);
+                    string currId;
+                    while(getline( idToken, currId, ' ')){
+                        string currNum;
+                        for(char c: currId){
+                            if(c >= '0' && c<='9'){
+                                currNum += c;
                             }
                         }
+                        id.push_back(stoi(currNum));
                     }
 
-                    // if a number was still being read at end
-                    if (num != -1) {
-                        if (num >= 0 && num < n) {
-                            mentions[num]++;
-                        }
+                    for(auto it: id){
+                        mentions[it]++;
                     }
                 }
             }
