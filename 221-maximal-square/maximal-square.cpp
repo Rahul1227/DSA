@@ -1,58 +1,49 @@
 class Solution {
-private: 
-    int largestRectangleArea(vector<int>& heights) {
-        // trying to solve in 1 pass;
-        heights.push_back(0); // for removing the outer while loop
-        int maxArea = 0;
-        int n = heights.size();
+private:
+    int getCurrArea(vector<int> &arr){
+        arr.push_back(0);
+        int n = arr.size();
         stack<int> st;
         st.push(0);
+        int maxArea = 0;
 
-        for(int i =1 ; i<n; i++){
-            while(!st.empty() && heights[i] < heights[st.top()]){
-                int currHeight = heights[st.top()];
+        for(int i =1; i<n; i++){
+            while(!st.empty() && arr[i] < arr[st.top()]){
+                int currHeight = arr[st.top()];
                 st.pop();
-                int pse = !st.empty() ? st.top() : -1;
                 int nse = i;
-                int a = min((nse-pse-1), currHeight);
-                int currArea = a * a;
-                maxArea = max(currArea, maxArea);
+                int pse = !st.empty() ? st.top() : -1;
+                int minSide = min((nse - pse -1), currHeight);
+                int currArea = minSide * minSide;
+                maxArea = max(maxArea,currArea);
             }
             st.push(i);
         }
 
-        // while(!st.empty()){
-        //         int currHeight = heights[st.top()];
-        //         st.pop();
-        //         int pse = !st.empty() ? st.top() : -1;
-        //         int nse = n;
-        //         int currArea = (nse - pse - 1) * currHeight;
-        //         maxArea = max(currArea, maxArea);
-        // }
         return maxArea;
-    }       
+    }
 public:
     int maximalSquare(vector<vector<char>>& matrix) {
         int n = matrix.size();
-        int m = matrix[0].size();
-        vector<int> currHisto(m,0);
-        int globalMaxArea = INT_MIN;
-        for(int i =0; i<n; i++){
-            //  forming the histogram
-            for(int j =0; j<m; j++){
-                if(matrix[i][j] == '0'){
-                    currHisto[j] = 0;
-                }else{
-                    currHisto[j] += matrix[i][j] - '0';
-                }
+        int m  = matrix[0].size();
+        vector<int> currMat(m, 0);
+        int globalMax = 0;
 
+        for(int i =0; i<n; i++){
+            for(int j =0; j<m;  j++){
+                if(matrix[i][j] != '0'){
+                    currMat[j] += matrix[i][j] - '0';
+
+                }else{
+                    currMat[j] = 0;
+                }
             }
 
-            int currArea = largestRectangleArea(currHisto);
-            globalMaxArea = max(globalMaxArea, currArea);
+            int currArea = getCurrArea(currMat);
+            globalMax = max(globalMax, currArea);
         }
 
-        return globalMaxArea;
+        return globalMax;
         
     }
 };
