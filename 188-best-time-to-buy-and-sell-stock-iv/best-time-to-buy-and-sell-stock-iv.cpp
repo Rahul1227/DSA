@@ -1,37 +1,27 @@
 class Solution {
 private:
-    int solve(int ind, int canBuy, int leftChances, 
-    vector<int> &prices, vector<vector<vector<int>>> &dp){
-        if(ind == prices.size() || leftChances == 0){
+    int solve(int ind, int canBuy, vector<int>& prices, int k, vector<vector<vector<int>>> &dp) {
+        // base case
+        if (ind == prices.size() || k == 0) {
             return 0;
         }
-
-        if(dp[ind][canBuy][leftChances] != -1){
-            return dp[ind][canBuy][leftChances];
-        }
-        int profit;
-
-        if(canBuy){
-            profit = max(-prices[ind] + solve(ind+1, 0, leftChances, prices,dp),
-                            0 + solve(ind+1,1,leftChances,prices,dp)
-            
-            );
-
+        if(dp[ind][canBuy][k] != -1) return dp[ind][canBuy][k];
+        int profit = 0;
+        if (canBuy) {
+            profit = max(-prices[ind] + solve(ind + 1, 0, prices, k,dp),
+                         solve(ind + 1, 1, prices, k,dp));
         }else{
-            profit = max(prices[ind] + solve(ind + 1, 1, leftChances-1,prices,dp),
-                        0+ solve(ind+1, 0, leftChances,prices,dp)
-            
-            );
+            profit = max(prices[ind] + solve(ind+1,1,prices,k-1,dp), solve(ind+1,0,prices,k,dp));
         }
-
-        return dp[ind][canBuy][leftChances] = profit;
+        
+        return dp[ind][canBuy][k] = profit;
     }
+
 public:
-    int maxProfit(int k,vector<int>& prices) {
+    int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(k+1,-1)));
-        return solve(0,1,k,prices,dp);
-        
-        
+
+        return solve(0, 1, prices, k, dp);
     }
 };
