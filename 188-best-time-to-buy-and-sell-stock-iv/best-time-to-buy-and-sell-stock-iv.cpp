@@ -6,6 +6,7 @@ private:
             return 0;
         }
         if(dp[ind][canBuy][k] != -1) return dp[ind][canBuy][k];
+        // skipping the current ind
         int notTake = solve(ind+1, canBuy, prices,k,dp);
         int profit = 0;
         if (canBuy) {
