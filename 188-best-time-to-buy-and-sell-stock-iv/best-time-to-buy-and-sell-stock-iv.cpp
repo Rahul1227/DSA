@@ -6,15 +6,15 @@ private:
             return 0;
         }
         if(dp[ind][canBuy][k] != -1) return dp[ind][canBuy][k];
+        int notTake = solve(ind+1, canBuy, prices,k,dp);
         int profit = 0;
         if (canBuy) {
-            profit = max(-prices[ind] + solve(ind + 1, 0, prices, k,dp),
-                         solve(ind + 1, 1, prices, k,dp));
+            profit =-prices[ind] + solve(ind + 1, 0, prices, k,dp);
         }else{
-            profit = max(prices[ind] + solve(ind+1,1,prices,k-1,dp), solve(ind+1,0,prices,k,dp));
+            profit = prices[ind] + solve(ind+1,1,prices,k-1,dp);
         }
         
-        return dp[ind][canBuy][k] = profit;
+        return dp[ind][canBuy][k] = max(profit, notTake);
     }
 
 public:
