@@ -44,6 +44,7 @@ public:
                 int toDelete = dll.back();
                 dll.pop_back();
                 mp.erase(toDelete);
+                n++;
             }
 
 
