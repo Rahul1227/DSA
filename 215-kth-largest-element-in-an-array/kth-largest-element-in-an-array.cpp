@@ -2,7 +2,7 @@ class Solution {
 private:
     int quickSort(int left, int right, vector<int>& nums) {
         int partitionValue = nums[left];
-        int i = left;
+        int i = left + 1;
         int j = right;
         while (i <= j) {
             if (nums[i] < partitionValue && nums[j] > partitionValue ) {
