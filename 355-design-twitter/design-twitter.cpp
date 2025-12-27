@@ -1,14 +1,19 @@
 class Twitter {
+    int timestamp = 1;
     unordered_map<int, vector<int>> mp;
-    vector<pair<int,int>> tweets;
-    // userId, tweetId
+    // timestamp, tweetid
+    deque<pair<int,int>> tweets[501];
 public:
     Twitter() {
         
     }
     
     void postTweet(int userId, int tweetId) {
-        tweets.push_back({userId, tweetId});
+        tweets[userId].push_front({timestamp++, tweetId});
+
+        if(tweets[userId].size() > 10){
+            tweets[userId].pop_back();
+        }
         
     }
     
@@ -20,19 +25,29 @@ public:
         for(auto id : list){
             toInclude[id] = 1;
         }
-        int count = 0;
-        vector<int> ans;
-        for(int i = tweets.size()-1; i>=0; i--){
-            auto [userId, tweetId] = tweets[i];
-            if(toInclude.find(userId) != toInclude.end()){
-                ans.push_back(tweetId);
-                count++;
-                if(count >= 10) break;
-            }
 
+        vector<int> ans;
+        priority_queue<pair<int,int>> pq;
+        for(auto [key, val] : toInclude){
+            vector<pair<int,int>> temp(tweets[key].begin(), tweets[key].end());
+            for(int i =0; i<temp.size(); i++){
+                pq.push(temp[i]);
+            }
+        }
+
+        int count =0;
+        while(!pq.empty()){
+            auto [timestamp, tweetId] = pq.top();
+            pq.pop();
+            ans.push_back(tweetId);
+            count++;
+            if(count >= 10) break;
         }
 
         return ans;
+        
+
+    
         
     }
     
