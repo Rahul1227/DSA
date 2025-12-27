@@ -1,5 +1,5 @@
 class Twitter {
-    map<int, vector<int>> mp;
+    unordered_map<int, vector<int>> mp;
     vector<pair<int,int>> tweets;
     // userId, tweetId
 public:
