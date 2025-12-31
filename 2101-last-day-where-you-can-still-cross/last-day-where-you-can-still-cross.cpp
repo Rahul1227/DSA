@@ -1,74 +1,96 @@
-class Solution {
+class DisjointSet {
 private:
-// row × col × log n
-    bool isValid(int totalRow, int totalCol, vector<vector<int>>& temp) {
-        bool flag1 = false;
-        bool flag2 = false;
-        queue<pair<int, int>> q;
-        vector<vector<int>> visited(totalRow + 1, vector<int>(totalCol + 1, 0));
+    vector<int> parent;
+    vector<int> size;
 
-        for (int col = 1; col <= totalCol; col++) {
-            if (temp[1][col] == 0) {
-                flag1 = true;
-                q.push({1, col});
-                visited[1][col] = 1;
-            }
+public:
+    DisjointSet(int n) {
+        parent.resize(n);
+        size.resize(n, 1);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
 
-            if (temp[totalRow][col] == 0) {
-                flag2 = true;
-            }
+    int findUltimateParent(int u) {
+        if (parent[u] == u) {
+            return u;
         }
 
-        if (!flag1 || !flag2)
-            return false;
+        return parent[u] = findUltimateParent(parent[u]);
+    }
 
-        while (!q.empty()) {
-            auto [x, y] = q.front();
-            q.pop();
-            if (x == totalRow)
-                return true;
+    void unionBySize(int u, int v) {
+        int ultimateParentU = findUltimateParent(u);
+        int ultimateParentV = findUltimateParent(v);
+
+        if (ultimateParentU == ultimateParentV)
+            return;
+
+        if (size[ultimateParentU] <= size[ultimateParentV]) {
+            parent[ultimateParentU] = ultimateParentV;
+            size[ultimateParentV] += size[ultimateParentU];
+
+        } else {
+            parent[ultimateParentV] = ultimateParentU;
+            size[ultimateParentU] += size[ultimateParentV];
+        }
+    }
+
+    bool isConnected(int u, int v) {
+        int ultimateParentU = findUltimateParent(u);
+        int ultimateParentV = findUltimateParent(v);
+
+        return ultimateParentU == ultimateParentV;
+    }
+};
+
+class Solution {
+public:
+    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
+        int TOP = row * col + 1;
+        int BOTTOM = row * col + 2;
+        DisjointSet ds(row * col + 3);
+
+        // 1==> water , 0 ==> land
+        vector<vector<int>> grid(row + 1, vector<int>(col + 1, 1));
+
+        int n = cells.size();
+        for (int days = n - 1; days >= 0; days--) {
+            int r = cells[days][0];
+            int c = cells[days][1];
+
+            grid[r][c] = 0;
+            int currCeil = (r - 1) * col + c;
 
             int dirX[] = {-1, 1, 0, 0};
             int dirY[] = {0, 0, 1, -1};
-
             for (int i = 0; i < 4; i++) {
-                int newX = x + dirX[i];
-                int newY = y + dirY[i];
+                int newR = r + dirX[i];
+                int newC = c + dirY[i];
 
-                if (newX >= 1 && newX <= totalRow && newY >= 1 &&
-                    newY <= totalCol && !visited[newX][newY] &&
-                    temp[newX][newY] == 0) {
-                    q.push({newX, newY});
-                    visited[newX][newY] = 1;
+                if (newR >= 1 && newR <= row && newC >= 1 && newC <= col &&
+                    grid[newR][newC] == 0) {
+                    int newCeil = (newR - 1) * col + newC;
+                    ds.unionBySize(currCeil, newCeil);
                 }
             }
-        }
-        return false;
-    }
 
-public:
-    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
-        int n = cells.size();
-        int left = 1;
-        int right = n;
-        int ans = left;
-        while (left <= right) {
-            int mid = left + ((right - left) / 2);
-            vector<vector<int>> temp(row + 1, vector<int>(col + 1, 0));
-            for (int i = 0; i < mid; i++) {
-                int currRow = cells[i][0];
-                int currCol = cells[i][1];
-                temp[currRow][currCol] = 1;
+            // connect to the top
+            if (r == 1) {
+                ds.unionBySize(currCeil, TOP);
             }
 
-            if (isValid(row, col, temp)) {
-                ans = mid;
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+            // connect to the bottom
+            if (r == row) {
+                ds.unionBySize(currCeil, BOTTOM);
+            }
+
+            // check if top and bottom are connect
+            if (ds.isConnected(TOP, BOTTOM)) {
+                return days;
             }
         }
-
-        return ans;
+        return 0;
     }
 };
