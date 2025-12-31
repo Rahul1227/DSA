@@ -1,3 +1,16 @@
+/*
+Approach
+1. Start with all cells as water (day = n)
+2. Go backwards through the days (n → 1)
+3. For each day, "remove water" (turn cell back to land)
+4. Connect this cell with all adjacent land cells using DSU
+5. If cell is in top row → connect to TOP virtual node
+6. If cell is in bottom row → connect to BOTTOM virtual node
+7. Check if TOP and BOTTOM are connected
+8. First time they connect → that's our answer!
+*/
+
+
 class DisjointSet {
 private:
     vector<int> parent;
