@@ -5,11 +5,12 @@ public:
         unordered_map<int,int> mp;
         for(auto num : nums){
             mp[num]++;
+            if(mp[num] == n/2) return num;
         }
 
-        for(auto [key, val] : mp){
-            if(val == n/2) return key;
-        }
+        // for(auto [key, val] : mp){
+        //     if(val == n/2) return key;
+        // }
         return -1;
         
     }
