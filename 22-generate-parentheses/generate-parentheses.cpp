@@ -20,12 +20,12 @@ private:
     void solve(int openCount, int closeCount, string &curr, vector<string> &ans){
         // base case
         if(openCount == 0 && closeCount ==0 ){
-            if(isValid(curr)){
+            // if(isValid(curr)){
                 ans.push_back(curr);
                 return;
-            }else{
-                return;
-            }
+            // }else{
+            //     return;
+            // }
         }
 
         // openTake;
@@ -35,7 +35,7 @@ private:
             curr.pop_back();
         }
 
-        if(closeCount){
+        if(closeCount > openCount){
             curr.push_back(')');
             solve(openCount, closeCount-1, curr, ans);
             curr.pop_back();
