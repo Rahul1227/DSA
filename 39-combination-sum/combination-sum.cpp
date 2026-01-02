@@ -1,39 +1,33 @@
 class Solution {
 private:
-    void solve(int ind, int target,int n, vector<int> curr,
-     vector<vector<int>> &ans, vector<int> &nums){
+    void solve(int ind, vector<int> &curr, vector<vector<int>> &ans, vector<int> &nums, int target){
         if(target == 0){
             ans.push_back(curr);
             return;
         }
 
-        
-        if(ind == n){
-            if(target == 0){
-                ans.push_back(curr);
-            }
+        if(ind ==nums.size()){
             return;
         }
 
-        // not take
-        solve(ind+1,target,n,curr,ans,nums);
+
+        // notTake
+        solve(ind+1,curr, ans, nums, target);
 
         // take
-        if(nums[ind] <= target){
+        if(target >= nums[ind]){
+            target -= nums[ind];
             curr.push_back(nums[ind]);
-            solve(ind, target - nums[ind], n,curr ,ans, nums);
+            solve(ind, curr, ans, nums,target);
             curr.pop_back();
         }
-        
-     }
+    }
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int>> ans;
         vector<int> curr;
-        int n = candidates.size();
-        solve(0,target,n, curr, ans, candidates);
+        solve(0, curr, ans, candidates, target);
         return ans;
         
-
     }
 };
