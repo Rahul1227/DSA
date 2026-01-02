@@ -8,10 +8,7 @@ public:
             if(mp[num] == n/2) return num;
         }
 
-        // for(auto [key, val] : mp){
-        //     if(val == n/2) return key;
-        // }
-        return -1;
+         __builtin_unreachable();
         
     }
 };
