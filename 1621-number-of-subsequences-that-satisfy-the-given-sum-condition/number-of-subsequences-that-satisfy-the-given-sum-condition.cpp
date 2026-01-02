@@ -10,15 +10,25 @@ public:
         }
 
         int count = 0;
-        for(int i =0; i<n; i++){
-            if(nums[i] + nums[i] > target) break;
-            int toSearch = target - nums[i];
-            auto it = upper_bound(nums.begin() + i, nums.end(), toSearch);
-            int ind = (it - nums.begin()) - 1;
-            if(ind >= i){
-                count = (count + power[ind-i]) % MOD;
-            }
+        // for(int i =0; i<n; i++){
+        //     if(nums[i] + nums[i] > target) break;
+        //     int toSearch = target - nums[i];
+        //     auto it = upper_bound(nums.begin() + i, nums.end(), toSearch);
+        //     int ind = (it - nums.begin()) - 1;
+        //     if(ind >= i){
+        //         count = (count + power[ind-i]) % MOD;
+        //     }
             
+        // }
+        int left = 0;
+        int right = n-1;
+        while(left <= right){
+            if(nums[left] + nums[right] <= target){
+                count = (count + power[right - left]) % MOD;
+                left++;
+            }else{
+                right--;
+            }
         }
 
         return count;
