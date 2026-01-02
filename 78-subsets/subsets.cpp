@@ -1,6 +1,6 @@
 class Solution {
 private:
-    void solve(int ind, vector<int> curr, vector<vector<int>>& ans,
+    void solve(int ind, vector<int> &curr, vector<vector<int>>& ans,
                vector<int>& nums) {
                 
                 if(ind == nums.size()){
@@ -14,6 +14,7 @@ private:
                 //take
                 curr.push_back(nums[ind]);
                 solve(ind+1, curr, ans, nums);
+                curr.pop_back();
 
 
                }
