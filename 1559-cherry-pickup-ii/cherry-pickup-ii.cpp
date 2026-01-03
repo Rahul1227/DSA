@@ -20,6 +20,7 @@ private:
         //     }
         // }
 
+        // simple.. think there is one more layer of all zeros
         if(r == row){
             return 0;
         }
