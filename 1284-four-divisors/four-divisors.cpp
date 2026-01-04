@@ -17,8 +17,15 @@ private:
 public:
     int sumFourDivisors(vector<int>& nums) {
         int ans = 0;
+        unordered_map<int,int> mp;
         for(auto num : nums){
-            ans += solve(num);
+            if(mp.count(num)){
+                ans += mp[num];
+                continue;
+            }
+            int result =solve(num);
+            mp[num] = result;
+            ans += result;
         }
         return ans;
         
