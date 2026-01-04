@@ -2,9 +2,15 @@ class Solution {
 private:
     int solve(int &num){
         vector<int> divisors;
-        for(int i =1; i<=num; i++){
-            if(num % i == 0){
+        for(int i = 1; i *i <= num; i++){
+            int remainder = num % i;
+            int quotient = num / i;
+            if(remainder == 0){
                 divisors.push_back(i);
+                if(i != quotient){
+                    divisors.push_back(quotient);
+                }
+               
                 if(divisors.size()> 4) return 0;
             }
         }
