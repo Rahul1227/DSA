@@ -23,11 +23,10 @@ private:
         }
 
         
-        string st="";
+    
         for(int i = ind; i< s.size(); i++){
-            st += s[i];
             if(isPalindrome(ind, i,s)){
-                curr.push_back(st);
+                curr.push_back(s.substr(ind,i-ind+1));
                 solve(i+1, curr, ans ,s);
                 curr.pop_back();
             }
