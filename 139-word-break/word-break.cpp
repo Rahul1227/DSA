@@ -6,6 +6,8 @@ private:
             return true;
         }
 
+        if(st.count(s)) return true;
+
         if(dp[ind] != -1) return dp[ind];
 
         string temp = "";
