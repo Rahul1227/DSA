@@ -10,34 +10,24 @@
  * };
  */
 class Solution {
+private:
+    void solve(TreeNode * root, int level, map<int,int> &mp){
+        if(!root) return;
+
+        mp[level] += root->val;
+        solve(root->left, level+1, mp);
+        solve(root->right, level+1, mp);
+    }
 public:
     int maxLevelSum(TreeNode* root) {
-        int maxSum= INT_MIN;
+        map<int,int> mp;
+        solve(root,1,mp);
+        int maxSum = INT_MIN;
         int maxSumInd = -1;
-        queue<TreeNode*> q;
-        q.push(root);
-        int currInd = 0;
-        while(!q.empty()){
-            int currSum = 0;
-            int len = q.size();
-            currInd++;
-            for(int i =0; i<len; i++){
-                TreeNode * temp = q.front();
-                q.pop();
-                if(temp->left){
-                    q.push(temp->left);
-                }
-
-                if(temp->right){
-                    q.push(temp->right);
-                }
-
-                currSum += temp->val;
-            }
-
-            if(currSum > maxSum){
-                maxSum = currSum;
-                maxSumInd = currInd;
+        for(auto [key, val] : mp){
+            if(val > maxSum){
+                maxSum = val;
+                maxSumInd = key;
             }
         }
 
