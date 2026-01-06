@@ -1,46 +1,53 @@
+struct TrieNode{
+    bool isEnd = false;
+    TrieNode * children[26];
+
+    bool containsKey(char c){
+        return children[c-'a'] != NULL;
+    }
+
+    void insertKey(char c, TrieNode * node){
+        children[c-'a'] = node;
+    }
+};
+
 class Trie {
+private:
+    TrieNode * root;
 public:
-    Trie * children[26];
-    bool isLeaf;
     Trie() {
-        isLeaf = false;
-        for(int i =0;  i<26; i++){
-            children[i] = nullptr;
-        }
+        root = new TrieNode();
         
     }
     
     void insert(string word) {
-        Trie* curr = this;
-
+        TrieNode * crawler = root;
         for(auto c : word){
-            if(curr->children[c -'a'] == nullptr){
-                Trie* newNode = new Trie();
-                curr->children[c-'a'] = newNode;
-
+            if(!crawler->containsKey(c)){
+                crawler->insertKey(c, new TrieNode());
             }
-            curr = curr->children[c-'a'];
+            crawler = crawler->children[c-'a'];
         }
-        curr->isLeaf = true;
+        crawler->isEnd = true;
         
     }
     
     bool search(string word) {
-        Trie* curr = this;
-
-        for(auto c: word){
-            if(curr->children[c-'a'] == nullptr) return false;
-            curr = curr->children[c-'a'];
+        TrieNode * crawler = root;
+        for(auto c : word){
+            if(!crawler->containsKey(c)) return false;
+            crawler = crawler->children[c-'a'];
         }
-        return curr->isLeaf;
+
+        return crawler->isEnd;
         
     }
     
     bool startsWith(string prefix) {
-        Trie* curr = this;
-        for(auto c : prefix){
-            if(curr->children[c-'a'] == nullptr) return false;
-            curr = curr->children[c-'a'];
+        TrieNode * crawler = root;
+        for(auto c: prefix){
+            if(!crawler->containsKey(c)) return false;
+            crawler = crawler->children[c-'a'];
         }
         return true;
         
