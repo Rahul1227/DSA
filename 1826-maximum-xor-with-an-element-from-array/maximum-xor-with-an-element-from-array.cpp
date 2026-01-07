@@ -59,12 +59,6 @@ public:
 
         sort(queries.begin(), queries.end(), compare);
         sort(nums.begin(), nums.end());
-        for (auto query : queries) {
-            for (auto i : query) {
-                cout << i << " ";
-            }
-            cout << endl;
-        }
 
         vector<int> result(len, -1);
         int currInd = 0;
@@ -73,7 +67,7 @@ public:
             int num = query[0];
             int limit = query[1];
             int ind = query[2];
-            while (nums[currInd] <= limit && currInd < nums.size()) {
+            while (currInd < nums.size() && nums[currInd] <= limit) {
                 trie.insertNum(nums[currInd]);
                 currInd++;
             }
