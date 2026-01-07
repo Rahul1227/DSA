@@ -6,8 +6,6 @@ struct TrieNode {
     bool containsKey(char c) { return children[c - 'a'] != nullptr; }
 
     void insertKey(char c, TrieNode* node) { children[c - 'a'] = node; }
-
-    TrieNode* getChild(char c) { return children[c - 'a']; }
 };
 
 class Trie {
@@ -23,7 +21,7 @@ public:
             if (!crawler->containsKey(c)) {
                 crawler->insertKey(c, new TrieNode());
             }
-            crawler = crawler->getChild(c);
+            crawler = crawler->children[c - 'a'];
         }
         crawler->isEnd = true;
         crawler->word = s;
@@ -34,51 +32,40 @@ public:
 
 class Solution {
 private:
-    void dfs(int row, int col, TrieNode* node, vector<vector<char>>& board,
-             vector<string>& ans) {
-
-        char currentChar = board[row][col];
-
-        // Check if current character exists in trie
-        if (!node->containsKey(currentChar)) {
-            return;
-        }
-
-        // Move to the next trie node
-        node = node->getChild(currentChar);
-
-        // If we found a word, add it to result
-        if (node->isEnd) {
-            ans.push_back(node->word);
-            node->isEnd = false; // Avoid duplicate entries
-        }
-
-        // Mark current cell as visited by temporarily changing it
-        board[row][col] = '#';
-
+    void dfs(int row, int col, TrieNode* node, vector<vector<char>>& board,vector<string>& ans) {
         int m = board.size();
         int n = board[0].size();
-        int dirX[] = {-1, 1, 0, 0};
-        int dirY[] = {0, 0, 1, -1};
+        int currChar = board[row][col];
+        if(node->containsKey(currChar)){
+            node = node->children[currChar -'a'];
+        }else{
+            return;
+        }
+        board[row][col] = '#';
+        
 
-        // Explore all 4 directions
-        for (int i = 0; i < 4; i++) {
+        if(node -> isEnd){
+            ans.push_back(node->word);
+            node->isEnd = false;
+        }
+
+        int dirX[] = {-1,1,0,0};
+        int dirY[] ={0,0,1,-1};
+        for(int i =0; i<4; i++){
             int newRow = row + dirX[i];
             int newCol = col + dirY[i];
 
-            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n &&
-                board[newRow][newCol] != '#') {
-                dfs(newRow, newCol, node, board, ans);
+            if(newRow >= 0 && newRow < m && newCol >= 0 && newCol <n && board[newRow][newCol] != '#'){
+                dfs(newRow, newCol,node, board, ans);
             }
         }
 
-        // Backtrack: restore the cell
-        board[row][col] = currentChar;
+        board[row][col] = currChar;
+
     }
 
 public:
-    vector<string> findWords(vector<vector<char>>& board,
-                             vector<string>& words) {
+    vector<string> findWords(vector<vector<char>>& board,vector<string>& words) {
         Trie trie;
 
         // Build trie with all words
