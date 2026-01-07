@@ -3,14 +3,6 @@ struct TrieNode {
     string word = "";
     TrieNode* children[26];
 
-    TrieNode() {
-        isEnd = false;
-        word = "";
-        for (int i = 0; i < 26; i++) {
-            children[i] = nullptr;
-        }
-    }
-
     bool containsKey(char c) { return children[c - 'a'] != nullptr; }
 
     void insertKey(char c, TrieNode* node) { children[c - 'a'] = node; }
