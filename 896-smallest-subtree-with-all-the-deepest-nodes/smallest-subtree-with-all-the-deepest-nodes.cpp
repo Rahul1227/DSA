@@ -10,23 +10,31 @@
  * };
  */
 class Solution {
+    unordered_map<TreeNode*,int> mp;
 private:
     int getHeight(TreeNode * root){
         if(!root) return 0;
         int leftHeight = 1 + getHeight(root->left);
         int rightHeight = 1 + getHeight(root->right);
-        return max(leftHeight, rightHeight);
+        return mp[root] = max(leftHeight, rightHeight);
+    }
+
+    TreeNode * solve(TreeNode * root){
+        int left = mp[root->left];
+        int right = mp[root->right];
+        if(left == right) return root;
+        if(left > right){
+            return solve(root->left);
+        }else{
+            return solve(root->right);
+        }
+
     }
 public:
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        int left = getHeight(root->left);
-        int right = getHeight(root->right);
-        if(left == right) return root;
-        if(left > right){
-            return subtreeWithAllDeepest(root->left);
-        }else{
-            return subtreeWithAllDeepest(root->right);
-        }
+        getHeight(root);
+        return solve(root);
+        
         
     }
 };
