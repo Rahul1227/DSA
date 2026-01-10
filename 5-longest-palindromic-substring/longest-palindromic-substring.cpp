@@ -1,42 +1,44 @@
 class Solution {
 private:
-    bool isPalindrome(int i, int j, string &s, vector<vector<int>> &dp){
+    int solve(int i, int j, vector<vector<int>> &dp, string &s1, string &s2){
+        if(i < 0 || j < 0) return 0;
 
         if(dp[i][j] != -1) return dp[i][j];
 
-        while(i<j){
-            if(s[i] == s[j]){
-                i++; 
-                j--;
-            }else{
-                dp[i][j] = false;
-                break;
-            }
+        if(s1[i] == s2[j]){
+            return dp[i][j] = 1 + solve(i-1, j-1, dp, s1, s2);
+        } else {
+            return dp[i][j] = 0;  // ✓ Fixed: substring breaks
         }
-        if(i >= j) dp[i][j] = true;
-        return dp[i][j];
     }
+    
 public:
     string longestPalindrome(string s) {
         int n = s.size();
-        // if(n == 1) return true;
-        vector<vector<int>> dp(n+1, vector<int>(n,-1));
-        int maxlen =0;
-        int startPoint = -1;
+        string s2 = s;
+        reverse(s2.begin(), s2.end());  // ✓ Fixed: reverse the string
+        
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        int maxLen = 1;
+        int start = 0;
 
-        for(int i =0; i<n; i++){
-            for(int j = i; j<n; j++){
-                if(isPalindrome(i,j,s,dp)){
-                    int currLen = j-i+1;
-                    if(currLen > maxlen){
-                        maxlen = currLen;
-                        startPoint = i;
+        for(int i = n-1; i >= 0; i--){
+            for(int j = n-1; j >= 0; j--){
+                int currLen = solve(i, j, dp, s, s2);
+                
+                if(currLen > maxLen){
+                    // ✓ Fixed: validate it's a real palindrome
+                    int startInOriginal = i - currLen + 1;
+                    int startInReversed = n - 1 - j;
+                    
+                    if(startInOriginal == startInReversed){
+                        maxLen = currLen;
+                        start = startInOriginal;  // ✓ Fixed: correct start index
                     }
                 }
             }
         }
-        
-        return s.substr(startPoint, maxlen);
-        
+
+        return s.substr(start, maxLen);
     }
 };
