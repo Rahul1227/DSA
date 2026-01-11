@@ -51,12 +51,30 @@ public:
 class Solution {
 public:
     int prefixCount(vector<string>& words, string pref) {
-        Trie trie;
+        // Trie trie;
+        // for(auto word : words){
+        //     trie.insertWord(word);
+        // }
+
+        // return trie.getCount(pref);
+
+        int count =0;
         for(auto word : words){
-            trie.insertWord(word);
+            bool flag = true;
+            for(int i=0; i< pref.size(); i++){
+                if(word[i] != pref[i]){
+                    flag = false;
+                    break;
+                }
+                
+            }
+
+            if(flag){
+                count++;
+            }
         }
 
-        return trie.getCount(pref);
+        return count;
         
     }
 };
