@@ -1,26 +1,71 @@
+struct TrieNode{
+    TrieNode *children[26];
+    bool isEnd = false;
+    bool containsKey(char c){
+        return children[c-'a'] != NULL;
+    }
+
+    void insertKey(char c, TrieNode * node){
+        children[c-'a'] = node;
+    }
+
+    int numberOfChildren(TrieNode * node){
+        int count =0;
+        for(int i =0; i< 26; i++){
+            if(children[i] != NULL) count++;
+
+        }
+        return count;
+    }
+};
+
+class Trie{
+private:
+    TrieNode * root;
+public:
+    Trie(){
+        root = new TrieNode();
+    }
+
+    void insertWord(string word){
+        TrieNode * crawler = root;
+        for(auto c : word){
+            if(!crawler->containsKey(c)){
+                crawler->insertKey(c, new TrieNode());
+            }
+            crawler = crawler ->children[c-'a'];
+        }
+        crawler -> isEnd = true;
+    }
+
+    TrieNode* getCrawler(){
+        return root;
+    }
+    
+};
+
+
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        int n = strs.size();
-        int minLen = INT_MAX;
-
-        for(int i =0; i<n; i++){
-            int currLen = strs[i].size();
-            minLen = min(currLen, minLen);
+        Trie trie;
+        for(auto word : strs){
+            trie.insertWord(word);
         }
-        int i,j;
-        for(j =0; j<minLen; j++){
-            for(i = 1; i<n; i++){
-                if(strs[i][j] != strs[i-1][j]){
-                    return strs[i].substr(0,j);
-                }
+
+        string ans ="";
+        TrieNode * crawler = trie.getCrawler();
+        for(int i =0; i<strs[0].size(); i++){
+            if(!crawler -> isEnd && crawler->numberOfChildren(crawler)==1){
+                ans += strs[0][i];
+                crawler = crawler ->children[strs[0][i] - 'a'];
+            }else{
+                break;
             }
+
         }
 
-        if( j == minLen){
-            return strs[0].substr(0,j);
-        }else{
-            return "";
-        }
+        return ans;
+        
     }
 };
