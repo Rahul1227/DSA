@@ -9,7 +9,7 @@ struct TrieNode{
         children[c-'a'] = node;
     }
 
-    int numberOfChildren(TrieNode * node){
+    int numberOfChildren(){
         int count =0;
         for(int i =0; i< 26; i++){
             if(children[i] != NULL) count++;
@@ -56,7 +56,7 @@ public:
         string ans ="";
         TrieNode * crawler = trie.getCrawler();
         for(int i =0; i<strs[0].size(); i++){
-            if(!crawler -> isEnd && crawler->numberOfChildren(crawler)==1){
+            if(!crawler -> isEnd && crawler->numberOfChildren()==1){
                 ans += strs[0][i];
                 crawler = crawler ->children[strs[0][i] - 'a'];
             }else{
