@@ -15,9 +15,12 @@ public:
     }
     
     int sumRange(int left, int right) {
+        int ToSubtract = 0;
+        if(left >= 1){
+            ToSubtract = prefixSum[left-1];
+        }
 
-
-        return prefixSum[right] - (left >= 1 ? prefixSum[left-1] : 0);
+        return prefixSum[right] - ToSubtract;
         
     }
 };
