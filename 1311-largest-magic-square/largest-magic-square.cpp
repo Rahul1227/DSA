@@ -76,26 +76,24 @@ public:
         //     cout<<endl;
         // }
 
-
-
-
-        // checking everyone
-        for(int i =0; i<n; i++){
-            for(int j=0; j<m; j++){
-                for(int k=i+1; k<n; k++){
-                    for(int l=j+1; l<m; l++){
-                        int side1 = k-i;
-                        int side2 = l-j;
-                        if(side1 == side2){
-                            if(isValid(i,j,k,l,grid)){
-                                maxSide = max(maxSide, side1+1);
-                            }
-                        }
+        for(int side = min(m,n); side >= 2; side --){
+            for(int i =0; i + side-1 < n; i++){
+                for(int j=0; j+side-1 < m; j++){
+                    int k = i+side-1;
+                    int l = j+side-1;
+                    if(isValid(i,j,k,l,grid)){
+                        return side;
                     }
+
+
                 }
+
             }
         }
 
-        return maxSide;
+
+        
+
+        return 1;
     }
 };
