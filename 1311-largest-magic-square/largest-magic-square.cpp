@@ -68,14 +68,6 @@ public:
             }
         }
 
-        // // displaying the result
-        // for(int i=0; i<=n; i++){
-        //     for(int j=0; j<m; j++){
-        //         cout<<prefixCol[i][j]<<" ";
-        //     }
-        //     cout<<endl;
-        // }
-
         for(int side = min(m,n); side >= 2; side --){
             for(int i =0; i + side-1 < n; i++){
                 for(int j=0; j+side-1 < m; j++){
