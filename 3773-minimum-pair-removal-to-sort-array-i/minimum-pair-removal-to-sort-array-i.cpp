@@ -4,10 +4,10 @@ public:
         int n = nums.size();
         int count = 0;
         while(!is_sorted(nums.begin(), nums.end())){
-            int i =0;
-            while(i < n-1 && nums[i] <= nums[i+1]){
-                i++;
-            }
+            // int i =0;
+            // while(i < n-1 && nums[i] <= nums[i+1]){
+            //     i++;
+            // }
             int currMinSum = INT_MAX;
             int minInd = -1;
 
