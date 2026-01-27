@@ -1,7 +1,8 @@
+using  P = pair<int,int>;
 class Solution {
 public:
     int minCost(int n, vector<vector<int>>& edges) {
-        vector<vector<pair<int,int>>> adj(n);
+        vector<vector<P>> adj(n);
 
         for(int i =0; i<edges.size(); i++){
             int u = edges[i][0];
@@ -13,7 +14,7 @@ public:
 
         vector<int> distance(n, INT_MAX);
 
-        priority_queue<pair<int,int>> pq;
+        priority_queue<P, vector<P>, greater<P>> pq;
         pq.push({0,0});
         distance[0] = 0;
 
