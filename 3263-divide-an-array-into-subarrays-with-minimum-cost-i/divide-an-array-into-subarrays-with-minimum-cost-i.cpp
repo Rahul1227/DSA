@@ -1,12 +1,18 @@
 class Solution {
 public:
     int minimumCost(vector<int>& nums) {
-        int n = nums.size();
-        int firstEle = nums[0];
-        swap(nums[0], nums[n-1]);
-        nums.pop_back();
-        sort(nums.begin(), nums.end());
-        return accumulate(nums.begin(), nums.begin() + 2,0) + firstEle;
+        int min1 = INT_MAX;
+        int min2 = INT_MAX;
+        for(int i=1; i< nums.size(); i++){
+            if(nums[i] < min2){
+                min2 = nums[i];
+            }
+            if(min2 < min1){
+               swap(min1, min2);
+            }
+        }
+        // sort(nums.begin()+1, nums.end());
+        return nums[0] + min1 + min2;
         
     }
 };
