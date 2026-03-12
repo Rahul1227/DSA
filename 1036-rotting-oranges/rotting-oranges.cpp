@@ -4,12 +4,16 @@ public:
         int m = grid.size();
         int n = grid[0].size();
         int ans = 0;
+        int fresh = 0;
         queue<pair<int,int>> q;
         // finding all the rotten oranges
         for(int i =0; i<m; i++){
             for(int j =0; j<n; j++){
                 if(grid[i][j] == 2){
                     q.push({i,j});
+                }
+                if(grid[i][j] ==1){
+                    fresh++;
                 }
             }
 
@@ -28,6 +32,7 @@ public:
                     if(newR >=0 && newR < m && newC >=0 && newC < n && grid[newR][newC] == 1){
                         grid[newR][newC] = 2;
                         q.push({newR, newC});
+                        fresh--;
                     }
                 }
             }
@@ -36,11 +41,7 @@ public:
 
         }
 
-        for(int i =0; i<m; i++){
-            for(int j=0; j<n; j++){
-                if(grid[i][j] == 1) return -1;
-            }
-        }
+        if(fresh > 0) return -1;
 
         return max(ans-1,0);
         
