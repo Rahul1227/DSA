@@ -1,61 +1,48 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        // jai mata ji
-        // jai baranj bali
-        int n = grid.size();
-        int m = grid[0].size();
-
-        int level  = 0;
-        queue<pair<int,pair<int,int>>> q;
-
-        // the directions are 
-        int dirX[] = {0, 1,0,-1};
-        int dirY[] = {-1,0,1,0};
-
-        // trying multi-source bfs
-        for(int i =0; i<n; i++){
-            for(int j =0; j<m; j++){
+        int m = grid.size();
+        int n = grid[0].size();
+        int ans = 0;
+        queue<pair<int,int>> q;
+        // finding all the rotten oranges
+        for(int i =0; i<m; i++){
+            for(int j =0; j<n; j++){
                 if(grid[i][j] == 2){
-                    q.push({level,{i,j}});
+                    q.push({i,j});
                 }
             }
-        }
 
+        }
+        int dirX[] = {-1,1,0,0};
+        int dirY[] = {0,0,1,-1};
         while(!q.empty()){
-            int  z = q.size();
-            for(int i =0; i<z; i++){
-                auto node = q.front();
-                int lev = node.first;
-                int x = node.second.first;
-                int y = node.second.second;
+            int len = q.size();
+            for(int i =0; i< len; i++){
+                auto [r, c] = q.front();
                 q.pop();
-                level = lev;
-                for(int j =0; j<4; j++){
-                    int newX = x + dirX[j];
-                    int newY = y + dirY[j];
-                    
-                    // validity check
-                    if(newX >=0 && newX < n && newY >= 0 && newY < m && grid[newX][newY] == 1){
-                        grid[newX][newY] = 2;
-                        q.push({lev + 1,{newX, newY}});
+
+                for(int x=0; x<4; x++){
+                    int newR = r + dirX[x];
+                    int newC = c + dirY[x];
+                    if(newR >=0 && newR < m && newC >=0 && newC < n && grid[newR][newC] == 1){
+                        grid[newR][newC] = 2;
+                        q.push({newR, newC});
                     }
                 }
             }
+            ans++;
+            
+
         }
 
-        for(int i =0;  i<n; i++){
-            for(int j =0; j<m; j++){
-                if(grid[i][j] == 1){
-                    return -1;
-                }
+        for(int i =0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 1) return -1;
             }
         }
 
-        return level;
-
-
-
+        return max(ans-1,0);
         
     }
 };
