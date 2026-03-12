@@ -13,8 +13,8 @@ public:
         int dirX[] = {-1,1,0,0};
         int dirY[] ={0,0,1,-1};
         while(!q.empty()){
-            int len = q.size();
-            for(int i=0; i<len; i++){
+            // int len = q.size();
+            // for(int i=0; i<len; i++){
 
                 auto [row,col] = q.front();
                 q.pop();
@@ -30,7 +30,7 @@ public:
                     }
                 }
 
-            }
+            // }
         }
         return image;
     }
