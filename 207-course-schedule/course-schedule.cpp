@@ -20,8 +20,7 @@ public:
         }
 
         while(!q.empty()){
-            int n = q.size();
-            for(int i =0; i<n; i++){
+            
                 int u = q.front();
                 q.pop();
                 ans.push_back(u);
@@ -33,7 +32,7 @@ public:
                     }
                 }
 
-            }
+            
         }
 
         return ans.size() == numCourses;
