@@ -19,11 +19,11 @@ public:
                 q.push(i);
             }
         }
-        vector<int> ans;
+        vector<int> ans(n);
         while(!q.empty()){
             int u = q.front();
             q.pop();
-            ans.push_back(u);
+            ans[u] = 1;
 
             for(auto v : adj[u]){
                 indegree[v]--;
@@ -32,9 +32,13 @@ public:
                 }
             }
         }
-
-        sort(ans.begin(), ans.end());
-        return ans;
+        vector<int> finalAns;
+        for(int i =0; i<n; i++){
+            if(ans[i] ==1){
+                finalAns.emplace_back(i);
+            }
+        }
+        return finalAns;
 
         
     }
