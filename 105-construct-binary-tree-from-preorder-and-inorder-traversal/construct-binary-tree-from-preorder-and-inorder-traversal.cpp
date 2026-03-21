@@ -11,15 +11,20 @@
  */
 class Solution {
 private:
-    TreeNode* solve(vector<int>& preorder,  unordered_map<int,int> &inorder, int start, int end, int &idx){
-        if(start > end) return NULL;
+    TreeNode* solve(int inStart, int inEnd, int preStart, int preEnd, 
+    unordered_map<int,int>& inorder, vector<int> &preOrder){
+        if(inStart > inEnd || preStart > preEnd){
+            return NULL;
+        }
 
-        int rootVal = preorder[idx];
+        int rootVal = preOrder[preStart];
         int i = inorder[rootVal];
-        idx++;
+        int leftCount = i - inStart;
+        int rightCount = inEnd - i;
         TreeNode* root = new TreeNode(rootVal);
-        root->left = solve(preorder, inorder, start, i-1, idx);
-        root->right = solve(preorder, inorder, i+1, end, idx);
+        root->left = solve(inStart, i-1, preStart+1, preStart + leftCount, inorder, preOrder);
+        root->right = solve(i+1, inEnd, preEnd - rightCount+1, preEnd, inorder, preOrder);
+
         return root;
     }
 public:
@@ -29,8 +34,8 @@ public:
         for(int i =0; i<n; i++){
             mp[inorder[i]] = i;
         }
-        int idx = 0;
-        return solve(preorder, mp, 0, n-1, idx);
+
+        return solve(0,n-1, 0, n-1, mp, preorder);
         
     }
 };
