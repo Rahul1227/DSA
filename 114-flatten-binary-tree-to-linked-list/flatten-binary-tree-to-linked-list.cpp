@@ -11,24 +11,28 @@
  */
 class Solution {
 private:
-    TreeNode * solve(TreeNode * &root){
+    TreeNode* solve(TreeNode* &root){
         if(!root) return NULL;
-        TreeNode * leftTree = solve(root->left);
-        TreeNode * rightTree = solve(root->right);
-        root->left = NULL;
-        if(leftTree){
-            root->right = leftTree;
-            TreeNode * temp = leftTree;
-            while(temp -> right){
-                temp = temp ->right;
-            }
-            temp -> right = rightTree;
+        
+        TreeNode* leftHead = solve(root->left);
+        TreeNode* rightHead = solve(root->right);
 
+        root->left = NULL;
+        if(leftHead){
+            root->right = leftHead;
+            TreeNode* temp = root;
+            while(temp->right){
+                temp = temp->right;
+            }
+            temp->right = rightHead;
+            
         }else{
-            root->right = rightTree;
+            root->right = rightHead;
         }
 
         return root;
+
+        
     }
 public:
     void flatten(TreeNode* root) {
