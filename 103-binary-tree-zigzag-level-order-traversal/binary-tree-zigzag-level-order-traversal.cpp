@@ -1,47 +1,41 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-        if(!root) return {};
-        bool needReverse = false;
-        queue<TreeNode*> q;
-        vector<vector<int>> ans;
-        q.push(root);
-        while(!q.empty()){
-            vector<int> temp;
-            int n = q.size();
-            for(int i =0; i<n; i++){
-                auto node = q.front();
-                q.pop();
-                temp.push_back(node->val);
-                if(node->left){
-                    q.push(node->left);
-                }
+        if (!root) return {};
 
-                if(node->right){
-                    q.push(node->right);
-                }
+        vector<vector<int>> result;
+        deque<TreeNode*> dq;
+        dq.push_back(root);
+        bool leftToRight = true;
 
+        while (!dq.empty()) {
+            vector<int> level;
+            int levelSize = dq.size();
+
+            for (int i = 0; i < levelSize; i++) {
+                if (leftToRight) {
+                    // pop from front
+                    TreeNode* node = dq.front();
+                    dq.pop_front();
+                    level.push_back(node->val);
+
+                    if (node->left)  dq.push_back(node->left);
+                    if (node->right) dq.push_back(node->right);
+                } else {
+                    // pop from back
+                    TreeNode* node = dq.back();
+                    dq.pop_back();
+                    level.push_back(node->val);
+
+                    if (node->right) dq.push_front(node->right);
+                    if (node->left)  dq.push_front(node->left);
+                }
             }
-            if(needReverse){
-                reverse(temp.begin(), temp.end());
-                // ans.push_back(temp);
-            }
-            ans.push_back(temp);
-            needReverse = !needReverse;
+
+            result.push_back(level);
+            leftToRight = !leftToRight;
         }
 
-        return ans;
-        
+        return result;
     }
 };
