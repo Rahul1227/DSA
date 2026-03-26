@@ -1,68 +1,71 @@
 class NumArray {
-    vector<int> segTree;
+private:
+    vector<int> segmentTree;
     int n;
-public:
-    NumArray(vector<int>& nums) {
-        n = nums.size();
-        segTree.resize(4 * n, 0);
-        buildTree(0,0,n-1,nums);
-        
-    }
 
-    void buildTree(int i, int left, int right, vector<int> &nums){
-        //base case
+    void buildTree(int ind, int left, int right, vector<int> &nums){
         if(left == right){
-            segTree[i] = nums[left];
-            return;
-        }
-
-        int mid = left + ((right - left)/2);
-        buildTree(2 * i + 1, left , mid, nums);
-        buildTree(2 * i + 2, mid + 1, right, nums);
-
-        segTree[i] = segTree[2 * i +1] + segTree[2 *i +2];
-
-    }
-
-    void updateVal(int i, int left, int right, int index, int val){
-        //base case
-        if(left == right){
-            segTree[i] = val;
+            segmentTree[ind] = nums[left];
             return;
         }
 
         int mid = left + ((right -left)/2);
+        buildTree(2 * ind + 1 , left, mid, nums);
+        buildTree(2 * ind + 2, mid +1, right, nums);
+        segmentTree[ind] = segmentTree[2 * ind +1] + segmentTree[2 * ind + 2];
+    }
 
-        if(index <= mid){
-            updateVal(2 * i +1, left, mid, index, val);
-        }else{
-            updateVal(2*i  +2, mid+1, right, index, val);
+    void updateTree(int ind, int left, int right, int targetInd, int val){
+        if(left == right){
+            segmentTree[ind] = val;
+            return;
         }
 
-        segTree[i] = segTree[2 * i +1] + segTree[2 * i + 2];
+        int mid = left + ((right - left)/2);
+        if(targetInd <= mid){
+            updateTree(2 * ind + 1, left, mid, targetInd, val);
+        }else{
+            updateTree(2 * ind + 2, mid + 1, right, targetInd, val);
+        }
+
+        segmentTree[ind] = segmentTree[2*ind+1] + segmentTree[2*ind+2];
+    }
+
+    int getRangeSum(int ind, int left, int right, int targetLeft, int targetRight){
+        // completely out-of range
+        if(left > targetRight || right < targetLeft){
+            return 0;
+        }
+
+        // completely inside the range
+        else if(left >= targetLeft && right <= targetRight){
+            return segmentTree[ind];
+        }
+
+        else{
+            int mid = left + (( right - left)/2);
+
+            return getRangeSum(2 * ind +1, left, mid, targetLeft, targetRight) + 
+                   getRangeSum(2 * ind + 2, mid+1, right, targetLeft, targetRight);
+        }
+    }
+public:
+    NumArray(vector<int>& nums) {
+        n =nums.size();
+        segmentTree.resize(4*n);
+        // ind, left, right, nums
+        buildTree(0,0, n-1, nums);
+        
     }
     
     void update(int index, int val) {
-        updateVal(0,0,n-1, index, val);
+        // ind, left, right, targetInd, val
+        updateTree(0,0,n-1,index, val);
         
-    }
-
-    int getSum(int i, int left, int right, int start, int end){
-        if(left > end || right < start){
-            return 0;
-        }else if(left >= start && right <= end){
-            return segTree[i];
-        }else{
-            int mid = left + ((right - left)/2);
-            int leftSum = getSum(2*i+1, left, mid, start, end);
-            int rightSum = getSum(2*i+2, mid+1,right, start, end);
-            return leftSum + rightSum;
-        }
     }
     
     int sumRange(int left, int right) {
-
-        return getSum(0,0,n-1, left, right);
+        return getRangeSum(0,0,n-1,left, right);
         
     }
 };
