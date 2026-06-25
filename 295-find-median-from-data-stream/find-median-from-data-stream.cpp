@@ -1,47 +1,37 @@
 class MedianFinder {
-priority_queue<int> maxHeap;
-priority_queue<int, vector<int>, greater<int>> minHeap;
-
+    priority_queue<int> firstHalf;
+    priority_queue<int, vector<int>, greater<int>> secondHalf;
 public:
     MedianFinder() {
+
         
     }
     
     void addNum(int num) {
-        if(maxHeap.empty() || num <= maxHeap.top()){
-            maxHeap.push(num);
+        if(firstHalf.empty() || num < firstHalf.top()){
+            firstHalf.push(num);
         }else{
-            minHeap.push(num);
+            secondHalf.push(num);
         }
 
-        int maxLen = maxHeap.size();
-        int minLen = minHeap.size();
-
-        if(maxLen - minLen >= 2){
-            int maxTop = maxHeap.top();
-            maxHeap.pop();
-            minHeap.push(maxTop);
-
+        int firstN = firstHalf.size();
+        int secondN = secondHalf.size();
+        if(firstN - secondN > 1){
+            secondHalf.push(firstHalf.top());
+            firstHalf.pop();
+        }else if(secondN > firstN){
+            firstHalf.push(secondHalf.top());
+            secondHalf.pop();
         }
-        if (minLen - maxLen >=1){
-            int minTop = minHeap.top();
-            minHeap.pop();
-            maxHeap.push(minTop);
-        }
+        
         
     }
     
     double findMedian() {
-        int maxLen = maxHeap.size();
-        int minLen = minHeap.size();
-        if(maxLen > minLen){
-            return maxHeap.top();
+        if(firstHalf.size() > secondHalf.size()){
+            return firstHalf.top();
         }else{
-            int maxTop = maxHeap.top();
-            int minTop = minHeap.top();
-            cout<<maxTop<<" "<<minTop;
-            double ans = 1.0 * (maxTop + minTop) / 2.0;
-            return ans;
+            return (firstHalf.top()*1.00000 + secondHalf.top())/2;
         }
         
     }
