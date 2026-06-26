@@ -1,45 +1,50 @@
 class Solution {
 private:
-    void solve(int ind, long long currVal, long long lastVal, string& curr,
-               vector<string>& ans, string& num, int target) {
-        if (ind == num.size()) {
-            if (currVal == target) ans.push_back(curr);
+    void solve(int ind, long long currVal, long long preVal, string &curr, vector<string> &ans, string &num, int target){
+        int n = num.size();
+        if(ind == n){
+            if(currVal == target){
+                ans.push_back(curr);
+            }
             return;
         }
 
-        long long num_val = 0;
-        for (int i = ind; i < num.size(); i++) {
-            num_val = num_val * 10 + (num[i] - '0');
-            string token = num.substr(ind, i - ind + 1);
+        string runningStr = "";
+        long long runningVal = 0;
 
-            // no leading zeros: "05", "01" not allowed
-            if (token.size() > 1 && token[0] == '0') break;
+        for(int i=ind; i<n; i++){
+            runningStr += num[i];
+            runningVal = runningVal * 10 + num[i] - '0';
 
-            if (ind == 0) {
-                curr += token;
-                solve(i + 1, num_val, num_val, curr, ans, num, target);
-                curr.resize(curr.size() - token.size());
-            } else {
-                curr += '+' + token;
-                solve(i + 1, currVal + num_val, num_val, curr, ans, num, target);
-                curr.resize(curr.size() - token.size() - 1);
+            if(runningStr.size() > 1 && runningStr[0] == '0') break;
 
-                curr += '-' + token;
-                solve(i + 1, currVal - num_val, -num_val, curr, ans, num, target);
-                curr.resize(curr.size() - token.size() - 1);
+            if(ind == 0){
+                curr += runningStr;
+                solve(i + 1, runningVal, runningVal, curr, ans, num, target);
+                curr.resize(curr.size() - runningStr.size());
+            }else{
+                // addition
+                curr += '+' + runningStr;
+                solve(i + 1, currVal + runningVal, runningVal, curr, ans, num, target);
+                curr.resize(curr.size() - runningStr.size() - 1);
 
-                curr += '*' + token;
-                solve(i + 1, currVal - lastVal + lastVal * num_val, lastVal * num_val, curr, ans, num, target);
-                curr.resize(curr.size() - token.size() - 1);
+                // subtraction
+                curr += '-' + runningStr;
+                solve(i + 1, currVal - runningVal, -runningVal, curr, ans, num, target);
+                curr.resize(curr.size() - runningStr.size() - 1);
+
+                // multiplication
+                curr += '*' + runningStr;
+                solve(i + 1, (currVal - preVal) + preVal * runningVal, preVal * runningVal, curr, ans, num, target);
+                curr.resize(curr.size() - runningStr.size() - 1);
             }
         }
     }
-
 public:
     vector<string> addOperators(string num, int target) {
         vector<string> ans;
-        string curr = "";
-        solve(0, 0, 0, curr, ans, num, target);
+        string curr;
+        solve(0, 0LL, 0LL, curr, ans, num, target);
         return ans;
     }
 };
