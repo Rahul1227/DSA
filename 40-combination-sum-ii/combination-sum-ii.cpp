@@ -1,27 +1,31 @@
 class Solution {
 private:
-    void solve(int ind, vector<int> &curr, vector<vector<int>> &ans, vector<int> &nums, int target){
+    void solve(int ind, int target, vector<int> &nums, vector<int> &curr, vector<vector<int>> &ans){
+    if(ind == nums.size()){
         if(target == 0){
-            ans.push_back(curr);
-            return;
+            ans.emplace_back(curr);
         }
-
-        for(int i = ind; i<nums.size(); i++){
-            if(i != ind && nums[i] == nums[i-1]) continue;
-            if(target >= nums[i]){
-                curr.push_back(nums[i]);
-                solve(i+1, curr, ans, nums, target-nums[i]);
-                curr.pop_back();
-               
-            }
-        }
+        return;
     }
+
+    // take
+    if(nums[ind] <= target){
+        curr.push_back(nums[ind]);
+        solve(ind + 1, target - nums[ind], nums, curr, ans);
+        curr.pop_back();
+    }
+
+    // not take — skip all duplicates
+    ind = upper_bound(nums.begin() + ind, nums.end(), nums[ind]) - nums.begin();
+    solve(ind, target, nums, curr, ans);
+}
+
 public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
-        vector<vector<int>> ans;
         vector<int> curr;
-        solve(0, curr, ans, candidates, target);
+        vector<vector<int>> ans;
+        sort(candidates.begin(), candidates.end());
+        solve(0, target, candidates, curr, ans);
         return ans;
         
     }
