@@ -10,10 +10,11 @@ public:
             int type = fruits[j];
             mp[type]++;
             while(mp.size() > 2){
-                cout<<"maxSize: "<<mp.size()<<endl;
-                mp[fruits[i]]--;
-                if(mp[fruits[i]] == 0){
-                    mp.erase(fruits[i]);
+                // cout<<"maxSize: "<<mp.size()<<endl;
+                int oldType = fruits[i];
+                mp[oldType]--;
+                if(mp[oldType] == 0){
+                    mp.erase(oldType);
                 }
                 i++;
 
