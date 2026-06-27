@@ -1,32 +1,35 @@
 class Solution {
+private:
+    int maxPerChar(string &s, int k, char c){
+        int n = s.size();
+        int currMaxLen =0;
+        int i =0;
+        int j =0;
+
+        while(j<n){
+            char letter = s[j];
+            if(letter != c && k>0){
+                k--;
+            }else if(letter != c && k==0){
+                while(s[i] == c){
+                    i++;
+                }
+                i++;
+            }
+
+
+            currMaxLen = max(currMaxLen, j-i+1);
+            j++;
+        }
+        return currMaxLen;
+    }
 public:
     int characterReplacement(string s, int k) {
-        // we store all the elements in the hashMap and get the maxf of the elements
-        // and it is valid if len - maxf <= k(changes possible)
-        // updating the maxlen only when the condition is true.
-        int n = s.size();
-        int hashMap[26];
-        int l =0;
-        int r =0;
-        int maxf =0;
-        int maxlen =0;
-        while(r<n){
-            hashMap[s[r] - 'A']++;
-            maxf = max(maxf, hashMap[s[r]-'A']);
-
-            if((r-l+1) - maxf > k){
-                hashMap[s[l] - 'A']--;
-                l++;
-            }
-
-            if((r-l+1) - maxf <=k){
-                maxlen = max(maxlen, (r-l+1));
-            }
-            r++;
+        int maxLen = 0;
+        for(char c = 'A'; c<= 'Z'; c++){
+            int currLen = maxPerChar(s,k,c);
+            maxLen = max(maxLen, currLen);
         }
-
-        return maxlen;
-
-        
+        return maxLen;
     }
 };
