@@ -7,9 +7,6 @@ public:
         int i = 0;
         int j = 1;
         int n = intervals.size();
-        // if(n == 1){
-        //     return intervals;
-        // }
         int currEnd;
         int currStart;
         while (i < n || j < n) {
@@ -22,13 +19,10 @@ public:
             }
 
             if (currEnd < freeStart || currStart > freeEnd) {
-                // no overlap, keep as is
                 ans.push_back({currStart, currEnd});
             } else {
-                // left piece
                 if (currStart < freeStart)
                     ans.push_back({currStart, freeStart - 1});
-                // right piece
                 if (currEnd > freeEnd)
                     ans.push_back({freeEnd + 1, currEnd});
             }
