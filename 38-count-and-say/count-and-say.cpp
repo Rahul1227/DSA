@@ -18,9 +18,7 @@ private:
             }
             int length = j - i;
             string lenStr = to_string(length);
-            for(auto c : lenStr){
-               result.push_back(c);
-            }
+            result += lenStr;
            result.push_back(ans[i]);
             i = j;
             
