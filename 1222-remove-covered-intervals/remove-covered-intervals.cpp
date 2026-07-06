@@ -17,8 +17,8 @@ public:
         while(j < n){
             while(j < n && intervals[i][0] <=intervals[j][0] && intervals[i][1] >= intervals[j][1]){
                 ans--;
-                cout<<j<<endl;
-                cout<<ans<<endl;
+                // cout<<j<<endl;
+                // cout<<ans<<endl;
                 j++;
             }
             i =j;
