@@ -1,48 +1,42 @@
 class Solution {
-private:
-    // bool isValid(unordered_map<char,int> &needed, unordered_map<char,int> &present){
-    //     for(auto [key, val] : needed){
-    //         if(!present.count(key)) return false;
-    //         else{
-    //             if(val > present[key]) return false;
-    //         }
-    //     }
-    //     return true;
-    // }
 public:
     string minWindow(string s, string t) {
-        int startingInd = -1;
-        unordered_map<char,int> needed;
+        int n1 = s.size();
+        int n2 = t.size();
+        if(n2 > n1) return "";
+        int startingPoint = -1;
+        int minLen = INT_MAX;
+        unordered_map<char,int> mp;
         for(auto c : t){
-            needed[c]++;
+            mp[c]++;
         }
-        int required = needed.size();
-        int i =0;
-        int j =0;
-        int n = s.size();
-        int minLen =INT_MAX;
-        int count = 0;
-        while(j < n){
-            needed[s[j]]--;
-            if(needed[s[j]]== 0){
-                count++;
-            }
 
-            while(count == required){
-                int currLen = j-i+1;
+        int count = n2;
+        int i =0;
+        int j = 0;
+
+        while(j < n1){
+            mp[s[j]]--;
+            if(mp[s[j]] >= 0) count--;
+            while(count == 0){
+                int currLen = j - i +1;
                 if(currLen < minLen){
-                    startingInd = i;
                     minLen = currLen;
-                    // ans = s.substr(i, minLen);
+                    startingPoint = i;
                 }
-                needed[s[i]]++;
-                if(needed[s[i]] > 0) count--;
+                mp[s[i]]++;
+                if(mp[s[i]] > 0) count++;
                 i++;
             }
+
+
+
+
             j++;
         }
-        if(startingInd != -1){
-            return s.substr(startingInd, minLen);
+
+        if(startingPoint != -1){
+            return s.substr(startingPoint, minLen);
         }else{
             return "";
         }
