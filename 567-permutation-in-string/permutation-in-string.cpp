@@ -1,34 +1,38 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        int n = s2.size(), m = s1.size();
-        if (m > n) return false;
+        int n1 = s1.size();
+        int n2 = s2.size();
+        if(n1 > n2) return false;
+        unordered_map<char, int> mp;
+        for(auto c : s1){
+            mp[c]++;
 
-        unordered_map<char,int> need;
-        for (char c : s1) need[c]++;
-        int required = need.size();
-        int matched = 0;
+        }
 
-        unordered_map<char,int> window;
-        int i = 0;
-        for (int j = 0; j < n; j++) {
-            char c = s2[j];
-            if (need.count(c)) {
-                window[c]++;
-                if (window[c] == need[c]) matched++;
-            }
+        int count = n1;
+        int i =0;
+        int j =0;
+        while( j<n2){
+            mp[s2[j]]--;
+            if(mp[s2[j]] >= 0) count--;
 
-            if (j - i + 1 > m) {
-                char l = s2[i];
-                if (need.count(l)) {
-                    if (window[l] == need[l]) matched--;
-                    window[l]--;
-                }
+            if(j-i+1 > n1){
+                mp[s2[i]]++;
+                if(mp[s2[i]] >0) count++;
                 i++;
             }
 
-            if (j - i + 1 == m && matched == required) return true;
+            if(count == 0){
+                return true;
+            }
+
+
+
+            j++;
         }
+
         return false;
+        
     }
 };
