@@ -1,36 +1,34 @@
 class Solution {
-private:
-    bool isValid(vector<int> &needed){
-        for(auto num  : needed){
-            if(num != 0) return false;
-        }
-        return true;
-    }
 public:
     bool checkInclusion(string s1, string s2) {
-        int n1 = s1.size();
-        int n2 = s2.size();
-        if(n1 > n2) return false;
-        vector<int> needed(26, 0);
-        int j;
-        for(j =0; j<n1; j++){
-            needed[s1[j] - 'a']++;
-            needed[s2[j] - 'a']--;
-        }
-        if(isValid(needed)) return true;
-        int i =0;
-        while(j<n2){
-            needed[s2[j] -'a']--;
-            if(j-i+1 > n1){
-                needed[s2[i]-'a']++;
+        int n = s2.size(), m = s1.size();
+        if (m > n) return false;
+
+        unordered_map<char,int> need;
+        for (char c : s1) need[c]++;
+        int required = need.size();
+        int matched = 0;
+
+        unordered_map<char,int> window;
+        int i = 0;
+        for (int j = 0; j < n; j++) {
+            char c = s2[j];
+            if (need.count(c)) {
+                window[c]++;
+                if (window[c] == need[c]) matched++;
+            }
+
+            if (j - i + 1 > m) {
+                char l = s2[i];
+                if (need.count(l)) {
+                    if (window[l] == need[l]) matched--;
+                    window[l]--;
+                }
                 i++;
             }
-            if(isValid(needed)) return true;
-            j++;
+
+            if (j - i + 1 == m && matched == required) return true;
         }
-
         return false;
-
-        
     }
 };
