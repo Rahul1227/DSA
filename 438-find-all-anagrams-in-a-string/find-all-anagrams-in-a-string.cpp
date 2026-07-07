@@ -1,48 +1,34 @@
 class Solution {
-private:
-    bool isValid(vector<int> &needed){
-        for(auto num : needed){
-            if(num != 0) return false;
-        }
-        return true;
-
-    }
 public:
     vector<int> findAnagrams(string s, string p) {
+        unordered_map<char,int> mp;
         vector<int> ans;
-        int n = s.size();
-        int m = p.size();
-        if(m > n) return ans;
-        vector<int> needed(26,0);
-        // vector<int> present(26,0);
-
-        for(int k =0; k<m; k++){
-            needed[p[k]-'a']++;
-            needed[s[k] - 'a']--;
+        int n1 = s.size();
+        int n2 = p.size();
+        if(n2 > n1) return ans;
+        for(auto c: p){
+            mp[c]++;
         }
+        int count = n2;
+        int i = 0;
+        int j =0;
+        while(j < n1){
+            mp[s[j]]--;
+            if(mp[s[j]] >=0) count--;
 
-        int i =0;
-        int j = m;
-        if(isValid(needed)){
-                ans.push_back(i);
-            }
-        while(j<n){
-            needed[s[j] - 'a']--;
-            if(j -i + 1 > m){
-                needed[s[i] -'a']++;
+            if(j-i+1 > n2){
+                mp[s[i]]++;
+                if(mp[s[i]] > 0) count++;
                 i++;
             }
 
-            if(isValid(needed)){
+            if(count == 0){
                 ans.push_back(i);
             }
-
-
             j++;
-
-
         }
+
         return ans;
-        
+
     }
 };
