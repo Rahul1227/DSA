@@ -1,68 +1,40 @@
-class DisjointSet {
+class Solution {
 private:
-    vector<int> parent;
-    vector<int> size;
-
+    void bfs(int i, vector<int> &component, int componentId, vector<vector<int>> &adj){
+        if(component[i] != -1) return;
+        component[i] = componentId;
+        for(auto v : adj[i]){
+            bfs(v, component, componentId, adj);
+        }
+    }
 public:
-    DisjointSet(int n) {
-        parent.resize(n);
-        size.resize(n, 1);
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
-        }
-    }
-
-    int findUltimateParent(int u) {
-        if (parent[u] == u) {
-            return u;
+    vector<bool> pathExistenceQueries(int n, vector<int>& nums, int maxDiff, vector<vector<int>>& queries) {
+        vector<vector<int>> adj(n);
+        for(int i =0; i+1< n; i++){
+            if(nums[i+1] - nums[i] <= maxDiff){
+                int u = i;
+                int v = i+1;
+                adj[u].push_back(v);
+                adj[v].push_back(u);
+            }
         }
 
-        return parent[u] = findUltimateParent(parent[u]);
-    }
-
-    void unionBySize(int u, int v) {
-        int parentU = findUltimateParent(u);
-        int parentV = findUltimateParent(v);
-
-        if (parentU == parentV)
-            return;
-
-        if (size[parentU] >= size[parentV]) {
-            parent[parentV] = parentU;
-            size[parentU] += size[parentV];
-        } else {
-            parent[parentU] = parentV;
-            size[parentV] += size[parentU];
+        vector<int> component(n, -1);
+        int componentId = -1;
+        for(int i =0; i<n; i++){
+            if(component[i] == -1){
+                componentId++;
+                bfs(i, component, componentId, adj);
+            }
         }
-    }
 
-    bool isConnected(int u, int v) {
-        int parentU = findUltimateParent(u);
-        int parentV = findUltimateParent(v);
-
-        return parentU == parentV;
+        vector<bool> ans;
+        for(auto query: queries){
+            int u = query[0];
+            int v = query[1];
+            ans.push_back(component[u] == component[v]);
+        }
+        return ans;
+        
     }
 };
-
-class Solution {
-public:
-    vector<bool> pathExistenceQueries(int n, vector<int>& nums, int maxDiff,
-                                      vector<vector<int>>& queries) {
-        DisjointSet ds(n);
-        // vector<vector<int>> adj(n);
-        int i = 0;
-       
-            for (int i = 0; i + 1 < n; i++) {
-                if (nums[i + 1] - nums[i] <= maxDiff) {
-                    ds.unionBySize(i, i + 1);
-                }
-            }
-
-            vector<bool> ans;
-            for (auto query : queries) {
-                ans.push_back(ds.isConnected(query[0], query[1]));
-            }
-
-            return ans;
-        }
-    };
