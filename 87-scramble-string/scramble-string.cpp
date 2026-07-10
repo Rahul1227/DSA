@@ -1,6 +1,6 @@
 class Solution {
 private:    
-    bool solve(string s1, string s2, map<string, bool> &mp){
+    bool solve(string s1, string s2, unordered_map<string, bool> &mp){
         int n1 = s1.size();
         int n2 = s2.size();
 
@@ -33,7 +33,7 @@ public:
         int n1 = s1.size();
         int n2 = s2.size();
         // vector<vector<int>> dp(n1+1, vector<int>(n2+1, -1));
-        map<string, bool> dp;
+        unordered_map<string, bool> dp;
         return solve(s1, s2, dp);
         
     }
