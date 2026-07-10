@@ -7,7 +7,7 @@ private:
         if( j ==0){
             return 1;
         }
-        
+
         if(i ==0){
             if(j == 0){
                 return 1;
@@ -31,8 +31,26 @@ public:
         int n1 = s.size();
         int n2 = t.size();
 
-        vector<vector<int>> dp(n1+1, vector<int>(n2+1, -1));
-        return solve(n1, n2, s, t, dp);
+        // vector<vector<int>> dp(n1+1, vector<int>(n2+1, -1));
+        // return solve(n1, n2, s, t, dp);
+
+        vector<vector<long long>> dp(n1+1, vector<long long >(n2+1, 0));
+        for(int i = 0; i<=n1; i++){
+            dp[i][0] = 1;
+        }
+
+        for(int i =1; i<=n1; i++){
+            for(int j=1; j<=n2; j++){
+                int take =0;
+                int skip = 1LL  * dp[i-1][j];
+                if(s[i-1] == t[j-1]){
+                    take = dp[i-1][j-1];
+                }
+                dp[i][j] = 1LL * take + skip;
+            }
+        }
+
+        return (int)dp[n1][n2];
         
     }
 };
