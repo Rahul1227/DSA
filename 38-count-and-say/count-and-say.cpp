@@ -1,35 +1,31 @@
 class Solution {
 private:
     void solve(int n, string &ans){
-        //base case
-        if( n == 1){
-            ans.push_back('1');
+        if(n == 1){
+            ans = "1";
             return;
         }
-
         solve(n-1, ans);
+        string curr ="";
         int i =0;
-        int j = 0;
+        int j =0;
         int len = ans.size();
-        string result ="";
-        while(j < len){
+        while(j < len || i<len){
             while(j < len && ans[i] == ans[j]){
                 j++;
             }
-            int length = j - i;
-            string lenStr = to_string(length);
-            result += lenStr;
-           result.push_back(ans[i]);
+            int currLen = j-i;
+            string str = to_string(currLen);
+            curr += str;
+            curr += ans[i];
             i = j;
-            
-
-
+            j++;
         }
-        ans = result;
+        ans = curr;
     }
 public:
     string countAndSay(int n) {
-        string ans = "";
+        string ans ="";
         solve(n, ans);
         return ans;
         
