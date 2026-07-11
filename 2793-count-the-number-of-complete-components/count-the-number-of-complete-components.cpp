@@ -38,7 +38,7 @@ private:
         }
 
         nodeCount = nodeCount * (nodeCount -1);
-        cout<<nodeCount<<" "<<edgeCount<<endl;
+        // cout<<nodeCount<<" "<<edgeCount<<endl;
 
         return nodeCount == edgeCount;
 
