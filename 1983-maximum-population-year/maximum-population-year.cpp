@@ -1,29 +1,29 @@
 class Solution {
 public:
     int maximumPopulation(vector<vector<int>>& logs) {
-        unordered_map<int,int> event;
-
-        for(auto& log : logs){
-            event[log[0]]++;
-            event[log[1]]--;
+        int maxPop = 0;
+        int year = 0;
+        int currPop = 0;
+        vector<vector<int>> events;
+        for(auto log : logs){
+            int birth = log[0];
+            int death = log[1];
+            events.push_back({birth, 1});
+            events.push_back({death, -1});
         }
 
-        int maxPopulation = 0;
-        int maxPopulationYear = 0;
-        int currPopulation = 0;
+        sort(events.begin(), events.end());
 
-        for(int year = 1950; year<= 2050; year++){
-            if(event.count(year)){
-                int population = event[year];
-                currPopulation += population;
-                if(currPopulation > maxPopulation){
-                    maxPopulation = currPopulation;
-                    maxPopulationYear = year;
-                }
+        for(int i =0; i<events.size(); i++){
+            currPop += events[i][1];
+            if(currPop > maxPop){
+                maxPop = currPop;
+                year = events[i][0];
             }
+
         }
 
-        return maxPopulationYear;
+        return year;
         
     }
 };
