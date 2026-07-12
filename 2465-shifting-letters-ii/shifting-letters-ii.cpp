@@ -1,7 +1,7 @@
 class Solution {
 public:
     string shiftingLetters(string s, vector<vector<int>>& shifts) {
-        int size = 5e4 + 4;
+        int size = s.size() + 1;
         vector<int> diff(size, 0);
         int startInd = size;
         int endInd = 0;
@@ -22,7 +22,6 @@ public:
             if(val < 0){
                 val += 26;
             }
-            // cout<<(((s[i] - 'a') + currSum) % 26)<<" ";
             s[i] = val + 'a'; 
 
         }
