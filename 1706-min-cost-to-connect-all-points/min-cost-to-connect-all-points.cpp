@@ -9,8 +9,8 @@ public:
         vector<int> visited(n,0);
         int cost = 0;
         for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                if(i==j) continue;
+            for(int j=i+1; j<n; j++){
+                // if(i==j) continue;
                 int x1 = points[i][0];
                 int y1 = points[i][1];
                 int x2 = points[j][0];
