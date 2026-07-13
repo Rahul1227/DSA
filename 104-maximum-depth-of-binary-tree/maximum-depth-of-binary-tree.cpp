@@ -14,10 +14,10 @@ private:
     int solve(TreeNode * root){
         if(!root) return 0;
 
-        int left = 1 + solve(root->left);
-        int right = 1 + solve(root->right);
+        int left = solve(root->left);
+        int right =solve(root->right);
 
-        return max(left, right);
+        return 1 + max(left, right);
     }
 public:
     int maxDepth(TreeNode* root) {
