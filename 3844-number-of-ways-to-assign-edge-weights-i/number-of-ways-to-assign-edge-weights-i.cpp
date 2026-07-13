@@ -1,6 +1,19 @@
 const int MOD = 1e9+7;
 class Solution {
 private:
+    long long getPower(int base, int power){
+        if(power == 0){
+            return 1;
+        }
+
+        long long half = getPower(base, power/2);
+        long long ans = (half * half) % MOD;
+        if(power%2 != 0){
+            ans = (ans * base) % MOD;
+        }
+
+        return ans;
+    }
     void dfs(int node, int &currLen, int &maxLen, vector<int> &visited, vector<vector<int>> &adj){
         if(visited[node]) return;
         visited[node] = 1;
@@ -33,14 +46,7 @@ public:
 
         dfs(1, currLen, maxLen, visited, adj);
 
-        // cout<<maxLen<<endl;
-        long long ans = 1;
-        // ans = ans % MOD;
-        while(maxLen>1){
-            ans = (1LL * ans * 2) %MOD;
-            maxLen--;
-        }
-        return ans;
+        return getPower(2, maxLen-1);
         
         
     }
