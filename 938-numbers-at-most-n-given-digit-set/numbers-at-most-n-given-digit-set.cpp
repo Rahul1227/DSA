@@ -34,14 +34,15 @@ public:
     }
 
     int atMostNGivenDigitSet(vector<string>& digits, int n) {
-        vector<string> newDigits;
-        newDigits.push_back("0");
-        for(auto str: digits){
-            newDigits.push_back(str);
-        }
+        // vector<string> newDigits;
+        // newDigits.push_back("0");
+        // for(auto str: digits){
+        //     newDigits.push_back(str);
+        // }
+        digits.push_back("0");
         string num = to_string(n);
         memset(dp, -1, sizeof(dp));
-        return solve(num, newDigits, 0,1,0) -1;
+        return solve(num, digits, 0,1,0) -1;
         
         
     }
