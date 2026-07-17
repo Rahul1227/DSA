@@ -1,30 +1,27 @@
 class Solution {
 private:
-    int solve(int ind, int prefixSum, vector<int> &nums, int target, vector<vector<int>> &dp, int sum){
-        int n = nums.size();
-        if(ind == n){
-            if(prefixSum == target){
-                return 1;
-            }else{
-                return 0;
-            }
+    int solve(int ind,int currSum, int offset, int target, vector<int> &nums, vector<vector<int>> &dp ){
+        //base case
+        if(ind == 0){
+            return currSum == target;
         }
 
-        if(dp[ind][prefixSum + sum] != -1) return dp[ind][prefixSum + sum];
+        if(dp[ind][currSum + offset] != -1) return dp[ind][currSum + offset];
 
-        int plus = solve(ind+1, prefixSum + nums[ind], nums, target, dp,sum);
+        int add = solve(ind-1, currSum + nums[ind-1], offset, target, nums, dp);
 
-        int minus = solve(ind+1, prefixSum - nums[ind], nums, target, dp,sum);
+        int sub = solve(ind-1, currSum - nums[ind-1], offset, target, nums, dp);
 
-        return dp[ind][prefixSum + sum] = plus + minus;
+
+        return dp[ind][currSum + offset] = add + sub;
     }
 public:
     int findTargetSumWays(vector<int>& nums, int target) {
         int n = nums.size();
-        int sum = accumulate(nums.begin(), nums.end(), 0);
+        int totalSum = accumulate(nums.begin(), nums.end(), 0);
 
-        vector<vector<int>> dp(n, vector<int>(2 * sum+1, -1));
-        return solve(0, 0, nums, target, dp, sum);
-        
+        int offset = totalSum;
+        vector<vector<int>> dp(n+1, vector<int>(2 * totalSum + 2, -1));
+        return solve(n,0,offset, target, nums, dp);
     }
 };
