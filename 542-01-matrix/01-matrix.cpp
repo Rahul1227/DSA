@@ -1,50 +1,50 @@
+using pii = pair<int,int>;
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-        queue<pair<int,int>> q;
-        int n = mat.size();
-        int m = mat[0].size();
-        vector<vector<int>> ans(n, vector<int>(m,0));
-        vector<vector<int>> visited(n, vector<int>(m,0));
-        int dirX[] = {-1,1,0,0};
-        int dirY[] = {0,0,1,-1};
-        for(int i =0; i<n; i++){
-            for(int j=0; j<m; j++){
+        int m = mat.size();
+        int n = mat[0].size();
+        queue<pii> q;
+        int dirX[] = {0,0,1,-1};
+        int dirY[] = {-1,1,0,0};
+
+        vector<vector<int>> ans(m, vector<int>(n, -1));
+        int currDistance = 0;
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
                 if(mat[i][j] == 0){
-                    visited[i][j] =1;
                     q.push({i,j});
+                    ans[i][j] = currDistance;
+
                 }
             }
-            
-
         }
-        int count =1;
+
+        currDistance++;
+
         while(!q.empty()){
             int len = q.size();
-            for(int ind=0; ind<len; ind++){
-                auto [x,y] = q.front();
+            for(int x=0; x<len; x++){
+                auto [i, j] = q.front();
                 q.pop();
 
-                for(int dir =0; dir<4; dir++){
-                    int newX = x + dirX[dir];
-                    int newY = y + dirY[dir];
-                    if(
-                        newX >=0 && newX<n && 
-                        newY >=0 && newY < m && 
-                        !visited[newX][newY] &&
-                        mat[newX][newY] == 1
-                    ){
-                        ans[newX][newY] = count;
-                        q.push({newX, newY});
-                        visited[newX][newY] =1;
+                for(int z =0; z<4; z++){
+                    int newI = i + dirX[z];
+                    int newJ = j + dirY[z];
+
+                    if(newI >=0 && newI< m && newJ >=0 && newJ <n && ans[newI][newJ] == -1){
+                        q.push({newI, newJ});
+                        ans[newI][newJ] = currDistance;
                     }
                 }
-            }
-            count++;
 
+            }
+            currDistance++;
         }
 
         return ans;
+
         
     }
 };
