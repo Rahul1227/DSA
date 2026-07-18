@@ -1,49 +1,62 @@
+using pii = pair<int,int>;
 class Solution {
-public:
-    int orangesRotting(vector<vector<int>>& grid) {
+private:
+     int bfs(queue<pii> &q, int freshCount, vector<vector<int>> &grid, vector<vector<int>> &visited){
+        int count = 0;
         int m = grid.size();
         int n = grid[0].size();
-        int ans = 0;
-        int fresh = 0;
-        queue<pair<int,int>> q;
-        // finding all the rotten oranges
-        for(int i =0; i<m; i++){
-            for(int j =0; j<n; j++){
-                if(grid[i][j] == 2){
-                    q.push({i,j});
-                }
-                if(grid[i][j] ==1){
-                    fresh++;
-                }
-            }
-
-        }
-        int dirX[] = {-1,1,0,0};
-        int dirY[] = {0,0,1,-1};
+        static int dirX[] = {0,0,1,-1};
+        static int dirY[] = {-1,1,0,0};
         while(!q.empty()){
             int len = q.size();
-            for(int i =0; i< len; i++){
-                auto [r, c] = q.front();
+            for(int x=0; x<len; x++){
+                auto [i, j] = q.front();
                 q.pop();
 
-                for(int x=0; x<4; x++){
-                    int newR = r + dirX[x];
-                    int newC = c + dirY[x];
-                    if(newR >=0 && newR < m && newC >=0 && newC < n && grid[newR][newC] == 1){
-                        grid[newR][newC] = 2;
-                        q.push({newR, newC});
-                        fresh--;
+                for(int z =0; z<4; z++){
+                    int newI = i + dirX[z];
+                    int newJ = j + dirY[z];
+
+                    if(newI >=0 && newI< m && newJ >=0 && newJ <n && !visited[newI][newJ] && grid[newI][newJ] == 1){
+                        freshCount--;
+                        q.push({newI, newJ});
+                        visited[newI][newJ] = 1;
                     }
                 }
+
+                
+
             }
-            ans++;
-            
-
+            count++;
         }
+        // cout<<freshCount<<endl;
+        // cout<<count<<endl;
+        if(freshCount > 0) return -1;
+        
 
-        if(fresh > 0) return -1;
+        return count-1;
+     }
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<pii> q;
+        int freshCount = 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> visited(m, vector<int>(n, 0));
 
-        return max(ans-1,0);
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 1) freshCount++;
+                else if(grid[i][j] == 2){
+                    q.push({i,j});
+                    visited[i][j] = 1;
+                }
+
+                
+            }
+        }
+        if(freshCount ==0) return 0;
+        return bfs(q, freshCount, grid, visited);
         
     }
 };
