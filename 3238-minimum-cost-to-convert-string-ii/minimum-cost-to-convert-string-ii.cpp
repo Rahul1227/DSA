@@ -1,86 +1,93 @@
+using pii = pair<int,int>;
+using ll = long long;
 class Solution {
-public:
-    long long minimumCost(
-        string source,
-        string target,
-        vector<string>& original,
-        vector<string>& changed,
-        vector<int>& cost
-    ) {
-        int n = source.length();
-        unordered_map<string, int> strToId;
-        int idCounter = 0;
-
-        // Map strings to unique IDs
-        for (const string& s : original)
-            if (!strToId.count(s)) strToId[s] = idCounter++;
-        for (const string& s : changed)
-            if (!strToId.count(s)) strToId[s] = idCounter++;
-
-        long long INF = 1e15;
-        vector<vector<long long>> dist(
-            idCounter,
-            vector<long long>(idCounter, INF)
-        );
-
-        for (int i = 0; i < idCounter; ++i)
-            dist[i][i] = 0;
-
-        // Direct transformations
-        for (int i = 0; i < original.size(); ++i) {
-            int u = strToId[original[i]];
-            int v = strToId[changed[i]];
-            dist[u][v] = min(dist[u][v], (long long)cost[i]);
+private:
+    //  solve(0, source, target, validLen, dp, adj);
+    ll solve(int ind, string &source, string &target, set<int> &validLen, vector<ll> &dp, vector<vector<ll>> &adj, unordered_map<string,int> &stringToId){
+        //base case
+        if(ind == source.size()){
+            return 0;
         }
 
-        // Floyd–Warshall
-        for (int k = 0; k < idCounter; ++k)
-            for (int i = 0; i < idCounter; ++i)
-                for (int j = 0; j < idCounter; ++j)
-                    if (dist[i][k] < INF && dist[k][j] < INF)
-                        dist[i][j] = min(
-                            dist[i][j],
-                            dist[i][k] + dist[k][j]
-                        );
+        if(dp[ind] != -1) return dp[ind];
 
-        vector<long long> dp(n + 1, INF);
-        dp[0] = 0;
+        ll ans = LLONG_MAX;
+        if(source[ind] == target[ind]){
+            ans = min(ans,solve(ind+1, source, target, validLen, dp, adj, stringToId)) ;
+        }
 
-        vector<int> lengths;
-        for (const string& s : original)
-            lengths.push_back(s.length());
-        sort(lengths.begin(), lengths.end());
-        lengths.erase(unique(lengths.begin(), lengths.end()), lengths.end());
+        // ll noTake = LLONG_MAX;
+        for(auto len : validLen){
+            if(ind + len > source.size()) break;
+            string sourceStr = source.substr(ind, len);
+            string targetStr = target.substr(ind, len);
+            if(!stringToId.count(sourceStr) || !stringToId.count(targetStr)) continue;
+            int ind1 = stringToId[sourceStr];
+            int ind2 = stringToId[targetStr];
+            if(adj[ind1][ind2] >= INT_MAX) continue;
+            ll subCall = solve(ind+len,source, target, validLen,dp, adj,stringToId);
+            if(subCall >= LLONG_MAX) continue;
+            ans = min(ans, 1LL *adj[ind1][ind2] + subCall);
+            
 
-        for (int i = 0; i < n; ++i) {
-            if (dp[i] == INF) continue;
+        }
 
-            // Match single character
-            if (source[i] == target[i])
-                dp[i + 1] = min(dp[i + 1], dp[i]);
+        return dp[ind] = ans;
 
-            // Try substring transformations
-            for (int len : lengths) {
-                if (i + len > n) break;
+    }
 
-                string subS = source.substr(i, len);
-                string subT = target.substr(i, len);
+public:
+    long long minimumCost(string source, string target, vector<string>& original, vector<string>& changed, vector<int>& cost) {
+        unordered_map<string, int> stringToId;
+        int idCounter = 0;
 
-                if (subS == subT)
-                    dp[i + len] = min(dp[i + len], dp[i]);
+        for(auto str: original){
+            if(!stringToId.count(str)){
+                stringToId[str] = idCounter++;
+            }
+        }
 
-                if (strToId.count(subS) && strToId.count(subT)) {
-                    int u = strToId[subS];
-                    int v = strToId[subT];
-                    if (dist[u][v] < INF)
-                        dp[i + len] = min(
-                            dp[i + len],
-                            dp[i] + dist[u][v]
-                        );
+        for(auto str: changed){
+            if(!stringToId.count(str)){
+                stringToId[str] = idCounter++;
+            }
+        }
+
+        vector<vector<ll>> adj(idCounter, vector<ll>(idCounter, INT_MAX));
+        // pushing 0 on the diagonal
+        for(int i=0; i<idCounter; i++){
+            adj[i][i] = 0;
+        }
+
+        for(int i=0; i<original.size(); i++){
+            int u = stringToId[original[i]];
+            int v = stringToId[changed[i]];
+            int w = cost[i];
+            adj[u][v] = min(adj[u][v], 1LL *w);
+        }
+
+        for(int k=0; k<idCounter; k++){
+            for(int i=0; i<idCounter; i++){
+                for(int j=0; j<idCounter; j++){
+                    if(adj[i][k] != INT_MAX && adj[k][j] != INT_MAX){
+                        adj[i][j] = min(adj[i][j], adj[i][k] + adj[k][j]);
+                    }
+
                 }
             }
         }
 
-        return dp[n] >= INF ? -1 : dp[n];
+        set<int> validLen;
+        for(auto str: original){
+            validLen.insert(str.size());
+        }
+
+        int n = source.size();
+        vector<ll> dp(n+1, -1);
+        ll result = solve(0, source, target, validLen, dp, adj, stringToId);
+        if(result >= LLONG_MAX) return -1;
+        return result;
+
+        
     }
 };
