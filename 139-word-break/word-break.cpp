@@ -1,40 +1,29 @@
 class Solution {
 private:
-    bool solve(int ind, string s, unordered_set<string> &st, vector<int> &dp){
+    bool solve(int ind, string &s, vector<string> &wordDict, vector<int> &dp){
         //base case
         if(ind == s.size()){
             return true;
         }
 
-        if(st.count(s)) return true;
-
         if(dp[ind] != -1) return dp[ind];
-
-        string temp = "";
-        for(int i = ind; i< s.size(); i++){
-            temp += s[i];
-            if(st.count(temp)){
-                if(solve(i+1,s,st,dp)) return dp[ind] = true;
+        bool ans = false;
+        for(auto word : wordDict){
+            int len = word.size();
+            if(ind + len > s.size()) continue;
+            string originalStr = s.substr(ind, len);
+            if(word == originalStr){
+                ans = ans || solve(ind + len, s,wordDict, dp);
             }
-
         }
-        return dp[ind] = false;
+
+        return dp[ind] = ans;
     }
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
-        // creating a set of the dict words
-        unordered_set<string> st;
-        for(auto word : wordDict){
-            st.insert(word);
-        }
-
         int n = s.size();
         vector<int> dp(n, -1);
-
-        if(solve(0, s, st, dp)){
-            return true;
-        }
-        return false;
+        return solve(0, s, wordDict, dp);
         
     }
 };
