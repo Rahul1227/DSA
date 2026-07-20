@@ -1,73 +1,94 @@
-struct TrieNode {
-    TrieNode* child[26] = {nullptr};
-    bool isValid = false;
-};
-
-class Trie {
-public:
-
-    TrieNode* root;
-
-    Trie() {
-        root = new TrieNode();
-    }
-
-    void insertWord(string str) {
-        TrieNode* crawler = root;
-        for (auto c : str) {
-            int ind = c - 'a';
-            if (crawler->child[ind] == nullptr) {
-                crawler->child[ind] = new TrieNode();
-            }
-            crawler = crawler->child[ind];
-            crawler->isValid = true;
-        }
-        // crawler->isEnd = true;
-    
-    }
-
-    TrieNode* getRoot(){
-        return root;
-    }
-};
-
 class Solution {
 private:
-    int solve(int ind, string& target, vector<int>& dp, TrieNode* crawler) {
-        int n = target.size();
-        if (ind == n) return 0;
-
-        if (dp[ind] != -1) return dp[ind];
-
-        int ans = INT_MAX;
-        auto originalCrawler = crawler;
-        for(int j = ind; j<target.size(); j++){
-            int currInd = target[j] - 'a';
-            if(!crawler->child[currInd]) break;
-            crawler = crawler->child[currInd];
-            if(crawler->isValid){
-                int subCall = solve(j+1, target, dp, originalCrawler);
-                if(subCall >= INT_MAX) continue;
-                ans = min(ans, 1 + subCall);
+    vector<int> getZArray(string& s) {
+        int n = s.size();
+        vector<int> lps(n, 0);
+        int len = 0;
+        int i =1;
+        while(i<n){
+            if(s[i]  == s[len]){
+                len++;
+                lps[i] = len;
+                i++;
+            }else if(len != 0){
+                len = lps[len-1];
+            }else{
+                i++;
             }
         }
 
-        
+        return lps;
 
-        return dp[ind] = ans;
+
+
+
+
+
+
+        // int l = 0;
+        // int r = 0;
+        // for (int i = 1; i < n; i++) {
+        //     // i is out of range
+        //     if (i > r) {
+        //         l = i;
+        //         r = i;
+        //         while (r < n && s[r] == s[r - l]) {
+        //             r++;
+        //         }
+        //         z[i] = r - l;
+        //         r--;
+        //     } else {
+        //         // i is in the range
+        //         int k = i - l;
+        //         // if z[k] is in the range
+        //         if (z[k] < r - i + 1) {
+        //             z[i] = z[k];
+        //         } else {
+        //             l = i;
+        //             while (r < n && s[r] == s[r - l]) {
+        //                 r++;
+        //             }
+        //             z[i] = r - l;
+        //             r--;
+        //         }
+        //     }
+        // }
+
+        // return z;
     }
 
 public:
     int minValidStrings(vector<string>& words, string target) {
-        Trie trie;
-        for (auto& w : words) {
-            trie.insertWord(w);
+        vector<vector<int>> zArrays;
+        for(auto word: words){
+            string newWord = word + '$' + target;
+            auto result = getZArray(newWord);
+            vector<int> temp;
+            int extra = word.size();
+            for(int i=extra; i<result.size(); i++){
+                temp.push_back(result[i]);
+            }
+            zArrays.push_back(temp);
         }
-        TrieNode* root = trie.getRoot();
 
-        int n = target.size();
-        vector<int> dp(n + 1, -1);
-        int result = solve(0, target, dp, root);
-        return result >= INT_MAX ? -1 : result;
+        // for(auto zArray : zArrays){
+        //     for(auto num : zArray){
+        //         cout<<num<<" ";
+        //     }
+        //     cout<<endl;
+        // }
+        int count =0;
+        int len = target.size();
+        while(len > 0){
+            int currMax = 0;
+            for(int i=0; i<zArrays.size(); i++){
+                currMax = max(currMax, zArrays[i][len]);
+            }
+            if(currMax == 0) return -1;
+            len -= currMax;
+            count++;
+        }
+
+        return count;
     }
 };
