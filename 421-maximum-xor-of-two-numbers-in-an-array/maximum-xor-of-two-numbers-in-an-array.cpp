@@ -1,54 +1,45 @@
 struct TrieNode{
-    TrieNode * children[2];
-
-    bool containsKey(int digit){
-        return children[digit] != NULL;
-    }
-
-    void insertKey(int digit, TrieNode * node){
-        children[digit] = node;
-    }
-
+    TrieNode* child[2] = {nullptr};
+  
 };
 
 class Trie{
 private:
-    TrieNode * root;
-
+    TrieNode* root;
 public:
     Trie(){
-        root = new TrieNode();
+        root = new TrieNode;
     }
 
     void insertNum(int num){
-        TrieNode * crawler = root;
+        TrieNode* crawler = root;
+
         for(int i = 31; i>=0; i--){
-            int digit = (num>>i) & 1; // to get the bit of the num in binary rep
-            if(!crawler->containsKey(digit)){
-                crawler->insertKey(digit, new TrieNode());
+            int digit =(num  >> i) & 1;
+
+            if(crawler->child[digit] == nullptr){
+                crawler->child[digit] = new TrieNode;
             }
-            crawler = crawler ->children[digit];
+            crawler = crawler->child[digit];
         }
     }
 
-
-    int checkAndGet(int num){
-        TrieNode * crawler = root;
+    int getResult(int num){
         int ans = 0;
-        for(int i = 31; i>=0; i--){
+        TrieNode* craw = root;
+        for(int i=31; i>=0; i--){
             int digit = (num >> i) & 1;
             int toGet = 1 - digit;
-            if(crawler->containsKey(toGet)){
-                ans = ans | ( 1 << i);
-                crawler = crawler -> children[toGet];
-
+            if(craw->child[toGet]){
+                ans = ans | (1 << i);
+                craw = craw->child[toGet];
             }else{
-                crawler = crawler->children[digit];
+                craw = craw ->child[digit];
             }
         }
+
         return ans;
     }
-
 
 
 
@@ -59,15 +50,14 @@ public:
 class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
-        // inserting into the trie
         Trie trie;
         for(auto num : nums){
             trie.insertNum(num);
         }
-        int maxResult = INT_MIN;
 
+        int maxResult = 0;
         for(auto num : nums){
-            int currResult = trie.checkAndGet(num);
+            int currResult = trie.getResult(num);
             maxResult = max(maxResult, currResult);
         }
 
