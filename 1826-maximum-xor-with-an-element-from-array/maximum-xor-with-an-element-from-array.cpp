@@ -1,84 +1,88 @@
-struct TrieNode {
-    TrieNode* children[2];
+// using piii = pair<int,pair<int,int>>;
 
-    bool containsKey(int digit) { return children[digit] != NULL; }
-
-    void insertKey(int digit, TrieNode* node) { children[digit] = node; }
+struct TrieNode{
+    TrieNode* child[2] = {nullptr};
 };
 
-class Trie {
+class Trie{
 private:
-    TrieNode* root;
-
+    TrieNode * root;
 public:
-    Trie() { root = new TrieNode(); }
+    Trie(){
+        root = new TrieNode;
+    }
 
-    void insertNum(int num) {
-        TrieNode* crawler = root;
-        for (int i = 31; i >= 0; i--) {
-            int digit =
-                (num >> i) & 1; // to get the bit of the num in binary rep
-            if (!crawler->containsKey(digit)) {
-                crawler->insertKey(digit, new TrieNode());
+    void insertNum(int num){
+        TrieNode* craw = root;
+        
+        for(int i =31; i>=0; i--){
+            int digit = (num >> i) & 1;
+            if(craw->child[digit] ==  nullptr){
+                craw->child[digit] = new TrieNode;
             }
-            crawler = crawler->children[digit];
+            craw = craw->child[digit];
         }
     }
 
-    int checkAndGet(int num) {
-        TrieNode* crawler = root;
-        int ans = 0;
-        for (int i = 31; i >= 0; i--) {
+    int getResult (int num){
+        int ans =0;
+        TrieNode* craw = root;
+
+        for(int i=31; i>=0; i--){
             int digit = (num >> i) & 1;
             int toGet = 1 - digit;
-            if (crawler->containsKey(toGet)) {
+            if(craw->child[toGet]  != nullptr){
                 ans = ans | (1 << i);
-                crawler = crawler->children[toGet];
-
-            } else {
-                crawler = crawler->children[digit];
+                craw = craw->child[toGet];
+            }else{
+                craw = craw->child[digit];
             }
         }
+
         return ans;
     }
+
+
+
 };
 
+
 class Solution {
-private:
-    static bool compare(const vector<int>& a, const vector<int>& b) {
+public:
+    static bool compare(vector<int> &a, vector<int> b){
         return a[1] < b[1];
     }
 
-public:
     vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
-        Trie trie;
-        int len = queries.size();
-        for (int i = 0; i < queries.size(); i++) {
+        for(int i =0; i<queries.size(); i++){
             queries[i].push_back(i);
         }
 
-        sort(queries.begin(), queries.end(), compare);
         sort(nums.begin(), nums.end());
+        sort(queries.begin(), queries.end(), compare);
+        int queryLen = queries.size();
+        vector<int> ans(queryLen);
 
-        vector<int> result(len, -1);
-        int currInd = 0;
-
-        for (auto query : queries) {
-            int num = query[0];
+        int inserted = 0;
+        Trie trie;
+        int n = nums.size();
+        for(auto query : queries){
+            int givenNum = query[0];
             int limit = query[1];
-            int ind = query[2];
-            while (currInd < nums.size() && nums[currInd] <= limit) {
-                trie.insertNum(nums[currInd]);
-                currInd++;
+
+            while(inserted < n && nums[inserted] <= limit){
+                trie.insertNum(nums[inserted]);
+                inserted++;
             }
-            if (currInd == 0)
-                continue;
-
-            int ans = trie.checkAndGet(num);
-
-            result[ind] = ans;
+            int result = -1;
+            if(inserted> 0){
+                result = trie.getResult(givenNum);
+            }
+            int ind = query[2];
+            ans[ind] = result;
         }
 
-        return result;
+        return ans;
+        
     }
 };
