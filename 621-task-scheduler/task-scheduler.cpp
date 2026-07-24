@@ -1,52 +1,45 @@
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n) {
-        vector<int> mp(26, 0);
-        // max heap to  store the frequence of the tasks
-        priority_queue<int> pq;
-
-        for(auto &c : tasks){
-            mp[c-'A']++;
+        vector<int> freq(26, 0);
+        for(auto c : tasks){
+            freq[c-'A']++;
         }
 
-        for(int i =0; i<26; i++){
-            if(mp[i] > 0){
-                pq.push(mp[i]);
+        priority_queue<int> pq;
+        for(auto num : freq){
+            if(num > 0){
+                pq.push(num);
             }
         }
-        int time = 0;
 
+        int time = 0;
         while(!pq.empty()){
             vector<int> temp;
-            for(int i=1; i<= n+1; i++){
+            for(int i =0; i<=n; i++){
                 if(!pq.empty()){
-                    int topFrq = pq.top();
+                    int currFreq = pq.top();
                     pq.pop();
-                    topFrq--;
-                    
-                        temp.push_back(topFrq);
-                   
+                    temp.push_back(--currFreq);
                 }
-                
             }
 
-            for(int i =0; i< temp.size(); i++){
-                if(temp[i] > 0){
-                    pq.push(temp[i]);
+            for(auto f : temp){
+                if(f > 0){
+                    pq.push(f);
                 }
-                
             }
 
-            if(!pq.empty()){
-                time += n+1;
-                
-            }else{
+            if(pq.empty()){
                 time += temp.size();
-
+            }else{
+                time += n+1;
             }
         }
 
         return time;
+
+
         
     }
 };
