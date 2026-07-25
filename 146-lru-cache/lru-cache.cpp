@@ -1,56 +1,50 @@
 class LRUCache {
-    list <int> dll;
-    map<int, pair<list<int> :: iterator, int>> mp;
-    int n;
 public:
+    list<pair<int,int>> l;
+    // key -> iterator
+    map<int, list<pair<int,int>> :: iterator> mp;
+    int n;
+    int currCapacity = 0;
     LRUCache(int capacity) {
         n = capacity;
         
     }
 
-    void makeLatest (int key){
-        dll.erase(mp[key].first);
-        dll.push_front(key);
-        mp[key].first = dll.begin();
-    }
+    // void makeRecent(int key)
     
     int get(int key) {
-        if(mp.find(key) == mp.end()){
+        if(mp.count(key)){
+            auto it = mp[key];
+            int val = it->second;
+            l.erase(it);
+            l.push_front({key, val});
+            mp[key] = l.begin();
+            return val;
+        }else{
             return -1;
         }
-
-        // if the key is present
-        // we should make it the latest key
-        makeLatest(key);
-
-
-        return mp[key].second;
+        
     }
     
     void put(int key, int value) {
-        // if the key is present
-        if(mp.find(key) != mp.end()){
-            mp[key].second = value;
-            makeLatest(key);
+        if(mp.count(key)){
+            l.erase(mp[key]);
+            l.push_front({key, value});
+            mp[key] = l.begin();
+            // currCapacity++;
+
         }else{
-            // if not present
-            dll.push_front(key);
-            mp[key] = {dll.begin(), value};
-            n--;
-
-
-            // check if there are more than the allocated elements
-            if(n < 0){
-                int toDelete = dll.back();
-                dll.pop_back();
-                mp.erase(toDelete);
-                n++;
+            if(currCapacity == n){
+                int toDeleteKey = l.back().first;
+                mp.erase(toDeleteKey);
+                l.pop_back();
+                currCapacity--;
             }
-
-
+            l.push_front({key, value});
+            mp[key] = l.begin();
+            currCapacity++;
 
         }
-
         
     }
 };
