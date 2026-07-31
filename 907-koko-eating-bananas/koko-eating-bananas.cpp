@@ -1,32 +1,35 @@
 class Solution {
 private:
-    bool isValid(int mid, vector<int>& nums, int h){
-        int currHours = 0;
-        for(int i = 0; i < nums.size(); i++){
-            currHours += ceil( 1.0* nums[i] / mid);
-            
-            // Early termination optimization
-            if(currHours > h) return false;
-        }
-        return currHours <= h;
-    }
-    
-public:
-    int minEatingSpeed(vector<int>& piles, int h) {
-        int left = 1;
-        int right = *max_element(piles.begin(), piles.end());
-        int ans = right;  // Initialize to right instead of 0
-        
-        while(left <= right){
-            int mid = left + (right - left) / 2;
-            if(isValid(mid, piles, h)){
-                ans = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
+    bool isPossible(int mid, vector<int> &piles, int h){
+        int currHour = 0;
+        for(int i =0; i< piles.size(); i++){
+            currHour += ceil(1.000 * piles[i]/mid);
+            if(currHour > h){
+                return false;
             }
         }
-        
+
+        return currHour <= h;
+    }
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int r = *max_element(piles.begin(), piles.end());
+        int l = 1;
+        int ans = r;
+        while(l<=r){
+            int mid = l + ((r-l)/2);
+
+            if(isPossible(mid, piles, h)){
+                ans = mid;
+                r = mid-1;
+            }else{
+                l = mid+1;
+            }
+        }
+
         return ans;
+
+        
+        
     }
 };
