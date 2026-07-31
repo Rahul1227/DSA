@@ -2,36 +2,36 @@ class Solution {
 public:
     bool search(vector<int>& nums, int target) {
         int n = nums.size();
-        int left = 0;
-        int right = n - 1;
-        while (left <= right) {
-            int mid = left + ((right - left) / 2);
-            if (nums[mid] == target)
-                return true;
-            
-            if(nums[left] == nums[mid] && nums[mid] == nums[right]){
-                left ++;
-                right --;
+        int l = 0;
+        int r = n-1;
+
+        while(l<=r){
+            int mid = l + ((r-l)/2);
+            if(nums[mid] == target) return true;
+
+            if(nums[mid] == nums[l] && nums[mid] == nums[r]){
+                l++;
+                r--;
                 continue;
             }
 
-            // left part sorted
-            if (nums[mid] >= nums[left]) {
-                if (nums[left] <= target && target <= nums[mid]) {
-                    right = mid - 1;
-                } else {
-                    left = mid + 1;
+            if(nums[l] <= nums[mid]){
+                // left sorted
+                if(nums[l] <= target && target <= nums[mid]){
+                    r = mid-1;
+                }else{
+                    l = mid+1;
                 }
-            } else {
-                // right part sorted
-                if (nums[mid] <= target && target <= nums[right]) {
-                    left = mid + 1;
-                } else {
-                    right = mid - 1;
+            }else{
+                //right sorted
+                if(nums[mid] <= target && target <= nums[r]){
+                    l = mid+1;
+                }else{
+                    r= mid-1;
                 }
             }
         }
-
         return false;
+        
     }
 };
