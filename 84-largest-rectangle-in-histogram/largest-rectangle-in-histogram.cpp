@@ -30,17 +30,58 @@ private:
     }
 public:
     int largestRectangleArea(vector<int>& heights) {
-        vector<int> nse = getNSE(heights);
-        vector<int> pse = getPSE(heights);
+        int n = heights.size();
         int maxArea = 0;
+        stack<int> st;
 
-        for(int i =0; i< heights.size(); i++){
-            int weight = nse[i] - pse[i] -1;
-            int currArea = weight * heights[i];
-            maxArea = max(maxArea, currArea);
+        for(int i =0; i<n; i++){
+            while(!st.empty() && heights[i] < heights[st.top()]){
+                int currInd = st.top();
+                st.pop();
+                int pse = st.empty() ? -1 : st.top();
+                int nse = i;
+                int width = nse - pse -1;
+                int height = heights[currInd];
+                int currArea = width * height;
+                maxArea= max(maxArea, currArea);
+
+            }
+
+
+
+            st.push(i);
+        }
+
+        while(!st.empty()){
+            int currInd = st.top();
+            st.pop();
+            int pse = st.empty() ? -1 : st.top();
+            int nse = n;
+            int width = nse - pse -1;
+            int height = heights[currInd];
+            int currArea = width * height;
+            maxArea= max(maxArea, currArea);
+
         }
 
         return maxArea;
+
+
+
+
+
+
+        // vector<int> nse = getNSE(heights);
+        // vector<int> pse = getPSE(heights);
+        // int maxArea = 0;
+
+        // for(int i =0; i< heights.size(); i++){
+        //     int weight = nse[i] - pse[i] -1;
+        //     int currArea = weight * heights[i];
+        //     maxArea = max(maxArea, currArea);
+        // }
+
+        // return maxArea;
         
     }
 };
