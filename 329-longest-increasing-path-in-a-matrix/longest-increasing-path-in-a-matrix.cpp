@@ -4,10 +4,6 @@ private:
         int row = mat.size();
         int col = mat[0].size();
 
-        // if(r<0 || c<0) return 0;
-        // if(r >= row || c >= col) return 0;
-
-
         if(dp[r][c] != -1) return dp[r][c];
 
         static int dirX[] = {0,0,1,-1};
