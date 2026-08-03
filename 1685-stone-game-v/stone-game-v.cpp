@@ -9,7 +9,7 @@ private:
 
         int totalSum = prefixSum[j+1] - prefixSum[i];
         int result = 0;
-        for(int k = i; k<=j; k++){
+        for(int k = i; k<j; k++){
             int leftSum = prefixSum[k+1] - prefixSum[i];
             int rightSum = totalSum - leftSum;
             if(leftSum < rightSum){
