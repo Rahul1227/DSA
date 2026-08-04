@@ -12,7 +12,7 @@ public:
             }
         }
 
-        vector<int> ans;
+        vector<int> isSafe(V, 0);
         queue<int> q;
 
         for(int i =0; i<V; i++){
@@ -24,7 +24,7 @@ public:
         while(!q.empty()){
             int node = q.front();
             q.pop();
-            ans.push_back(node);
+            isSafe[node] =1 ;
 
             for(auto v : adj[node]){
                 if(outDegree[v] > 0){
@@ -36,7 +36,13 @@ public:
             }
         }
 
-        sort(ans.begin(), ans.end());
+        vector<int> ans;
+        for(int i=0; i<V; i++){
+            if(isSafe[i]){
+                ans.push_back(i);
+            }
+        }
+
         return ans;
         
     }
