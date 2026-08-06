@@ -7,11 +7,23 @@ public:
             pq.push(num);
         }
 
-        while(k--){
+        while(k > 0){
             int ele = pq.top();
             pq.pop();
-            ele++;
+            int nextEle = (!pq.empty()) ? pq.top() : -1;
+            if(nextEle != -1){
+                int increment = nextEle - ele + 1;
+                int allowed = min(increment, k);
+                ele += allowed;
+                k -= allowed;
+                
+            }else{
+                ele++;
+                k--;
+                
+            }
             pq.push(ele);
+            
         }
 
         long long product = 1;
