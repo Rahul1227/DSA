@@ -12,8 +12,9 @@ public:
         stack<int> st;
         int n = arr.size();
         long long totalSum = 0;
-        for(int i =0; i<n; i++){
-            while(!st.empty() && arr[i] < arr[st.top()]){
+        for(int i =0; i<=n; i++){
+            int currEle = (i==n) ? INT_MIN: arr[i];
+            while(!st.empty() && currEle < arr[st.top()]){
                 int currInd = st.top();
                 st.pop();
                 int pse = !st.empty() ? st.top() : -1;
@@ -26,17 +27,17 @@ public:
             st.push(i);
         }
 
-        while(!st.empty()){
-            int currInd = st.top();
-            st.pop();
-            int pse = !st.empty() ? st.top() : -1;
-            int nse = n;
-            int leftCount = currInd - pse;
-            int rightCount = nse - currInd;
-            long long currSum = (1LL * arr[currInd] * leftCount * rightCount) % MOD;
-            totalSum = (1LL * totalSum + currSum) % MOD;
+        // while(!st.empty()){
+        //     int currInd = st.top();
+        //     st.pop();
+        //     int pse = !st.empty() ? st.top() : -1;
+        //     int nse = n;
+        //     int leftCount = currInd - pse;
+        //     int rightCount = nse - currInd;
+        //     long long currSum = (1LL * arr[currInd] * leftCount * rightCount) % MOD;
+        //     totalSum = (1LL * totalSum + currSum) % MOD;
 
-        }
+        // }
 
         return totalSum;
         
