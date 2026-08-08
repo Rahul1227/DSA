@@ -2,28 +2,35 @@ class Solution {
 public:
     int longestSubarray(vector<int>& nums) {
         int n = nums.size();
-        bool canChange = true;
-        int i = 0;
-        int j = 0;
-        int maxSize = 0;
-        while(j<n){
+        int i =0;
+        int j =0;
+        int maxLen = 0;
+        int zeroCount =0;
+
+        while(j < n){
             if(nums[j] == 0){
-                if(canChange){
-                    canChange = false;
-                }else{
-                    maxSize = max(maxSize, j-i);
-                    while(nums[i] != 0){
-                        i++;
-                    }
-                    i++;
-
-
-                }
+                zeroCount++;
             }
+
+            while(zeroCount > 1){
+                if(nums[i]==0){
+                    zeroCount--;
+                }
+                i++;
+            }
+
+            int currLen = j-i+1 - zeroCount;
+            maxLen = max(maxLen, currLen);
             j++;
+            
         }
-        maxSize = max(maxSize, j-i);
-        return maxSize-1;
+
+        if(zeroCount){
+            return maxLen;
+        }else{
+            return maxLen -1;
+        }
+        
         
     }
 };
