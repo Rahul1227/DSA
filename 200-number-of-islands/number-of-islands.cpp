@@ -1,58 +1,50 @@
+using pii = pair<int,int>;
 class Solution {
 private:
-    void bfs(int i, int j,vector<vector<int>> &visited, vector<vector<char>> &grid){
-        int n = grid.size();
-        int m = grid[0].size();
-        queue<pair<int,int>> q;
-        q.push({i,j});
-        visited[i][j] = 1;
+    void bfs(int r, int c, vector<vector<int>> &visited, vector<vector<char>> &grid){
+        int m = grid.size();
+        int n = grid[0].size();
+        queue<pii> q;
+        q.push({r,c});
+        visited[r][c] = 1;
 
-        static vector<int> dirX = {-1,1,0,0};
-        static vector<int> dirY ={0,0,1,-1};
+        static int dirX[] = {0,0,1,-1};
+        static int dirY[] = {-1,1,0,0};
 
         while(!q.empty()){
-            auto[x,y] = q.front();
+            auto [row, col] = q.front();
             q.pop();
-            
-            
-            // iterating in all the directions
-            for(int i =0; i<4; i++){
-                int newX = x + dirX[i];
-                int newY = y + dirY[i];
 
-                if(newX >= 0 && newX < n && newY >=0 && newY < m && 
-                        visited[newX][newY] == 0 && grid[newX][newY] =='1'){
-                
-                q.push({newX, newY});
-                visited[newX][newY] =1;
-                    
+            for(int z =0; z<4; z++){
+                int newR = row + dirX[z];
+                int newC = col + dirY[z];
+
+                if(newR >=0 && newR < m && newC >=0 && newC < n && !visited[newR][newC] && grid[newR][newC] == '1'){
+                    visited[newR][newC] = 1;
+                    q.push({newR, newC});
                 }
-            }
 
-            
+            }
         }
     }
 public:
     int numIslands(vector<vector<char>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
+        int row = grid.size();
+        int col = grid[0].size();
 
-        vector<vector<int>> visited(n, vector<int>(m, 0));
-        int count = 0;
-
-
-        for(int i =0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(grid[i][j] == '1' && !visited[i][j]){
-                    count++;
-                    bfs(i,j,visited,grid);
+        vector<vector<int>> visited(row, vector<int>(col, 0));
+        int ans = 0;
+        for(int i=0; i<row; i++){
+            for(int j=0; j<col; j++){
+                if(!visited[i][j] && grid[i][j] == '1'){
+                    bfs(i, j, visited, grid);
+                    ans++;
                 }
-
             }
+            
+
         }
 
-        return count;
-
-        
+        return ans;
     }
 };
