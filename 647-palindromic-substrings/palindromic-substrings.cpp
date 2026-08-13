@@ -1,30 +1,32 @@
 class Solution {
-public:
-    int countSubstrings(string s) {
+private:
+    int getCount(int i, int j, string &s){
         int n = s.size();
-
-        vector<vector<bool>> dp(n, vector<bool>(n, false));
         int count = 0;
 
-        for(int L =1; L<= n; L++){
-            for(int i=0; i+L-1 < n; i++){
-                int j = i+L-1;
-
-                if(i == j){
-                    dp[i][j] = true;
-                }else if(i+1 == j){
-                    dp[i][j] = (s[i] == s[j]);
-                }else{
-                    dp[i][j] = (s[i]== s[j] && dp[i+1][j-1]);
-                }
-
-                if(dp[i][j] == true){
-                    count++;
-                }
-            }
+        while(i>=0 && j< n && s[i] == s[j]){
+            count++;
+            // ulta hai 
+            i--;
+            j++;
         }
 
         return count;
+    }
+public:
+    int countSubstrings(string s) {
+        int ans = 0;
+
+        for(int i=0; i<s.size(); i++){
+            // odd len
+            ans += getCount(i,i,s);
+
+            // even len
+            ans += getCount(i, i+1, s);
+
+        }
+
+        return ans;
         
     }
 };
