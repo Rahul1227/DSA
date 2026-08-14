@@ -1,51 +1,76 @@
-class Solution {
-private:
-    void bfs(int src, vector<int> &visited, vector<vector<int>> &adj){
-        queue<int> q;
-        q.push(src);
-        visited[src] = 1;
-        while(!q.empty()){
-            int node = q.front();
-            q.pop();
-            for(auto adjNode : adj[node]){
-                if(!visited[adjNode]){
-                    visited[adjNode] = 1;
-                    q.push(adjNode);
-                }
-            }
+class DisjointSet{
+public:
+    vector<int> parent;
+    vector<int> size;
+
+    DisjointSet(int n){
+        parent.resize(n);
+        size.assign(n,1);
+
+        for(int i=0; i<n; i++){
+            parent[i] = i;
         }
     }
+
+    int findUltimateParent(int u){
+        if(parent[u] == u){
+            return u;
+        }
+
+        return parent[u] = findUltimateParent(parent[u]);
+    }
+
+    void unionBySize(int u, int v){
+        int parentU = findUltimateParent(u);
+        int parentV = findUltimateParent(v);
+
+        if(parentU == parentV) return;
+
+        if(size[parentU] >= size[parentV]){
+            parent[parentV] = parentU;
+            size[parentU] += size[parentV];
+        }else{
+            parent[parentU] = parentV;
+            size[parentV] += size[parentU];
+        }
+    }
+
+
+    vector<int> getParent(){
+        for(int i =0;  i< parent.size(); i++){
+            parent[i] = findUltimateParent(i);
+        }
+        return parent;
+    }
+
+   
+    
+};
+class Solution {
 public:
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
-        vector<vector<int>> adj(n);
-        for(int i =0; i<n; i++){
-            for(int j =0; j<n; j++){
+        DisjointSet ds(n);
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
                 if(i==j) continue;
                 if(isConnected[i][j] == 1){
-                    adj[i].push_back(j);
+                    ds.unionBySize(i,j);
                 }
             }
         }
 
-        // for(int i =0; i<n; i++){
-        //     cout<<i<<" ";
-        //     for(int j =0; j<adj[i].size(); j++){
-        //         cout<<adj[i][j]<<" ";
-        //     }
-        //     cout<<endl;
-        // }
+        vector<int> par  = ds.getParent();
 
-        int result =0;
-        vector<int> visited(n,0);
-
-        for(int i =0; i<n; i++){
-            if(!visited[i]){
-                result++;
-                bfs(i,visited,adj);
+        int count = 0;
+        for(int i=0; i<n; i++){
+            if(par[i] == i){
+                count++;
             }
         }
 
-        return result;
+        return count;
+        
     }
 };
