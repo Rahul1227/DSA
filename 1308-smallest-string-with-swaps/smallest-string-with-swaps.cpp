@@ -67,10 +67,10 @@ public:
 
         for(auto &[key, val]: mp){
             sort(val.begin(), val.end());
-            cout<<key<<" -> ";
-            for(auto v  : val){
-                cout<<v<<" ";
-            }
+            // cout<<key<<" -> ";
+            // for(auto v  : val){
+            //     cout<<v<<" ";
+            // }
         }
 
         vector<int> currInd(n, 0);
