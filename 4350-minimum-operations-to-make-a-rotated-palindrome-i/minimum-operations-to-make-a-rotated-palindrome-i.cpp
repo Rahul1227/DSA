@@ -1,19 +1,18 @@
 class Solution {
 private:
-    int getOps(deque<char> dq){
+    int getOps(string &s){
         int totalOps = 0;
-        while(!dq.empty()){
-            int firstInd = (dq.front() - 'a');
-            dq.pop_front();
-            int secondInd = firstInd;
-            if(!dq.empty()){
-                secondInd = dq.back() -'a';
-                dq.pop_back();
-            }
+        int i =0;
+        int j = s.size()-1;
+        while(i<j){
+            int firstInd = s[i] -'a';
+            int secondInd = s[j] -'a';
             int maxInd = max(firstInd, secondInd);
             int minInd = min(firstInd, secondInd);
             int currOps = min(maxInd-minInd, (25-maxInd) + minInd+1);
             totalOps += currOps;
+            i++;
+            j--;
 
         }
 
@@ -22,20 +21,15 @@ private:
 public:
     int minOperations(string s) {
         int n = s.size();
-        deque<char> dq;
-        for(auto c : s){
-            dq.push_back(c);
-        }
+        
         int minOps = INT_MAX;
 
         for(int i=0; i<n; i++){
-            int currOps = getOps(dq);
+            int currOps = getOps(s);
             int totalOps = currOps + i;
             minOps = min(minOps, totalOps);
             //rotating
-            char c = dq.front();
-            dq.pop_front();
-            dq.push_back(c);
+            rotate(s.begin(), s.begin()+1, s.end());
 
         }
         return minOps;
