@@ -1,10 +1,21 @@
 class Solution {
 public:
     int maxNumberOfFamilies(int n, vector<vector<int>>& reservedSeats) {
-        vector<vector<int>> seatBlocks;
-        seatBlocks.push_back({2,3,4,5});
-        seatBlocks.push_back({4,5,6,7});
-        seatBlocks.push_back({6,7,8,9});
+        int left = 0;
+        int mid = 0;
+        int right = 0;
+
+        for(int i=2; i<=5; i++){
+            left = left | (1<<i);
+        }
+
+        for(int i=4; i<=7; i++){
+            mid = mid | (1 << i);
+        }
+
+        for(int i=6; i<=9; i++){
+            right = right | (1<<i);
+        }
 
         unordered_map<int, int> mp;
 
@@ -18,25 +29,14 @@ public:
         
 
         for(auto &[row, mask]: mp){
-            bool prev = false;
-            for(int i=0; i<3; i++){
-                bool isValid = true;
-                if(prev){
-                    prev = false;
-                    continue;
-                }
-                for(int j=0; j<4; j++){
-                    if(mask & (1 << seatBlocks[i][j])){
-                        isValid = false;
-                        break;
-                    }
-                }
-                if(isValid){
-                    prev = true;
-                    ans++;
-                }
-                // cout<<ans<<endl;
+            bool l = !(mask & left);
+            bool r = !(mask & right);
+            bool m = !(mask &mid);
 
+            if(l && r){
+                ans += 2;
+            }else if(l || r || m){
+                ans++;
             }
 
         }
