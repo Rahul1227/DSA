@@ -6,18 +6,18 @@ public:
         seatBlocks.push_back({4,5,6,7});
         seatBlocks.push_back({6,7,8,9});
 
-        unordered_map<int, unordered_set<int>> mp;
+        unordered_map<int, int> mp;
 
         for(auto seats : reservedSeats){
             int row = seats[0];
             int col = seats[1];
-            mp[row].insert(col);
+            mp[row] = mp[row] | (1 << col);
         }
 
         int ans = (n - mp.size()) * 2;
         
 
-        for(auto &[row, col]: mp){
+        for(auto &[row, mask]: mp){
             bool prev = false;
             for(int i=0; i<3; i++){
                 bool isValid = true;
@@ -26,7 +26,7 @@ public:
                     continue;
                 }
                 for(int j=0; j<4; j++){
-                    if(col.count(seatBlocks[i][j])){
+                    if(mask & (1 << seatBlocks[i][j])){
                         isValid = false;
                         break;
                     }
