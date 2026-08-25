@@ -7,10 +7,12 @@ public:
         int leftMax = 0;
         int rightMax = 0;
         int ans = 0;
-        while(left < right){
+
+        while(left <= right){
             if(height[left] <= height[right]){
                 if(height[left] < leftMax){
                     ans += leftMax - height[left];
+
                 }else{
                     leftMax = height[left];
                 }
@@ -23,8 +25,8 @@ public:
                 }
                 right--;
             }
-
         }
+
         return ans;
         
     }
