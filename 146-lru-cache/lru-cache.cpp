@@ -1,51 +1,41 @@
 class LRUCache {
-public:
-    list<pair<int,int>> l;
-    // key -> iterator
-    unordered_map<int, list<pair<int,int>> :: iterator> mp;
     int n;
-    int currCapacity = 0;
-    LRUCache(int capacity) {
-        n = capacity;
-        
-    }
+    list<pair<int, int>> l;
+    unordered_map<int, list<pair<int, int>>::iterator> mp;
 
-    // void makeRecent(int key)
-    
+public:
+    LRUCache(int capacity) { n = capacity; }
+
     int get(int key) {
-        if(mp.count(key)){
+        if (mp.count(key)) {
             auto it = mp[key];
-            int val = it->second;
+            auto [key, val] = *it;
             l.erase(it);
-            l.push_front({key, val});
-            mp[key] = l.begin();
+            l.push_back({key, val});
+            mp[key] = prev(l.end());
             return val;
-        }else{
+        } else {
             return -1;
         }
-        
     }
-    
+
     void put(int key, int value) {
-        if(mp.count(key)){
-            l.erase(mp[key]);
-            l.push_front({key, value});
-            mp[key] = l.begin();
-            // currCapacity++;
+        if (mp.count(key)) {
+            auto it = mp[key];
+            l.erase(it);
+            l.push_back({key, value});
+            mp[key] = prev(l.end());
 
-        }else{
-            if(currCapacity == n){
-                int toDeleteKey = l.back().first;
-                mp.erase(toDeleteKey);
-                l.pop_back();
-                currCapacity--;
+        } else {
+            if (l.size() == n) {
+                auto [delKey, val] = l.front();
+                // cout<<"We are deleting "<<delKey<<endl;
+                mp.erase(delKey);
+                l.pop_front();
             }
-            l.push_front({key, value});
-            mp[key] = l.begin();
-            currCapacity++;
-
+            l.push_back({key, value});
+            mp[key] = prev(l.end());
         }
-        
     }
 };
 
