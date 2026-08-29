@@ -33,14 +33,14 @@ public:
             rank++;
         }
 
-        for(auto &[rank, val] : mp){
-            sort(val.begin(), val.end());
-            // cout<<rank<<" -> ";
-            // for(auto num: val){
-            //     cout<<num<<" ";
-            // }
-            // cout<<endl;
-        }
+        // for(auto &[rank, val] : mp){
+        //     sort(val.begin(), val.end());
+        //     // cout<<rank<<" -> ";
+        //     // for(auto num: val){
+        //     //     cout<<num<<" ";
+        //     // }
+        //     // cout<<endl;
+        // }
 
         vector<int> indices(rank,  0);
         for(int i=0; i<n; i++){
