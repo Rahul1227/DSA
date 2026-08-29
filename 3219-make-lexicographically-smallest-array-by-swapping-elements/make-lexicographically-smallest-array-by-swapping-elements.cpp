@@ -15,13 +15,13 @@ public:
 
         int i =0;
         while(i<n){
-            auto[val, ind] = arr[i];
+            auto &[val, ind] = arr[i];
             nums[ind] = rank;
             mp[rank].push_back(val);
             int j;
             for(j=i+1; j<n; j++){
                 if(arr[j].first - arr[j-1].first <= limit){
-                    auto[val, ind] = arr[j];
+                    auto &[val, ind] = arr[j];
                     nums[ind] = rank;
                     mp[rank].push_back(val);
 
@@ -45,7 +45,7 @@ public:
         vector<int> indices(rank,  0);
         for(int i=0; i<n; i++){
             int rank = nums[i];
-            cout<<rank<<endl;
+            // cout<<rank<<endl;
             nums[i] = mp[rank][indices[rank]];
             indices[rank]++;
         }
