@@ -14,29 +14,17 @@ public:
 
         }
 
-        vector<int> bucket1;
-        vector<int> bucket2;
+        int res1 = 0;
+        int res2 = 0;
         for(auto num: nums){
             if(num &(1<<splitPos)){
-                bucket1.push_back(num);
+                res1 ^= num;
             }else{
-                bucket2.push_back(num);
+                res2 ^= num;
             }
         }
 
-        vector<int> ans;
-        int res1 = 0;
-        for(auto num:bucket1){
-            res1 ^= num;
-        }
-        ans.push_back(res1);
-        res1 = 0;
-        for(auto num: bucket2){
-            res1 ^= num;
-        }
-        ans.push_back(res1);
-
-        return ans;
+        return {res1, res2};
         
     }
 };
