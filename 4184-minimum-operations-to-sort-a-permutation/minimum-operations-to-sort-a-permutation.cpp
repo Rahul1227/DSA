@@ -73,11 +73,9 @@ public:
     // Backward target
     if (backward) {
 
-        // u = (p + 1) % n
-        int u = (p + 1) % n;
+        p = n - p -1;
 
-        // One Flip + shortest rotation direction
-        int costBackward = min(u, n - u) + 1;
+       int costBackward = min(1 + (n-p), 1 + p);
 
         answer = min(answer, costBackward);
     }
