@@ -20,7 +20,7 @@ private:
         int maxTillNow = max({maxChildSum+ root->val, root->val});
         maxSum = max(maxSum, maxTillNow);
         int maxofChild = max({leftSum, rightSum, 0});
-        return max(root->val + maxofChild, root->val);
+        return root->val + maxofChild;
     }
 public:
     int maxPathSum(TreeNode* root) {
