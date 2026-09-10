@@ -7,38 +7,36 @@
  *     ListNode(int x) : val(x), next(nullptr) {}
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
- */
+*/
+
+using pii = pair<int, ListNode*>;
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode * head = new ListNode (-1);
-        ListNode * temp = head;
-        int n = lists.size();
-        priority_queue<pair<int, ListNode *>, vector<pair<int, ListNode *>>, greater<pair<int, ListNode *>> > minHeap;
-
-        // pushing the head of all the linkedlist into the heap
-        for(int i=0; i<n; i++){
-            if(lists[i]){
-                minHeap.push({lists[i]->val, lists[i]});
+        priority_queue<pii, vector<pii>, greater<>> pq;
+        for(auto list: lists){
+            if(list){
+                pq.push({list->val, list});
             }
             
-    }
+        }
 
-        // now working on the minHeap
-        while(!minHeap.empty()){
-            auto [val, node] = minHeap.top();
-            minHeap.pop();
-            temp -> next = node;
-            temp = node;
-            if(node->next){
-                node = node ->next;
-                minHeap.push({node->val, node});
+        ListNode* ans = new ListNode(-1);
+        ListNode* temp = ans;
+
+        while(!pq.empty()){
+            auto[val, l] = pq.top();
+            pq.pop();
+            ListNode* newNode = new ListNode(val);
+            temp->next = newNode;
+            temp = newNode;
+            l = l->next;
+            if(l){
+                pq.push({l->val, l});
             }
         }
 
-        return head->next;
-
-        
+        return ans->next;
         
     }
 };
