@@ -9,24 +9,30 @@
  * };
  */
 class Solution {
-private:
-    ListNode * solve(ListNode * l1, ListNode * l2){
-        if(!l1) return l2;
-        if(!l2) return l1;
-        ListNode * result;
-        if(l1->val <= l2->val){
-            result = l1;
-            l1->next = solve(l1->next, l2);
-        }else{
-            result = l2;
-            l2 ->next = solve(l1, l2->next);
-        }
-
-        return result;
-    }
 public:
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        return solve(list1, list2);
-        
+        ListNode* ans = new ListNode(-1);
+        ListNode* temp = ans;
+        while(list1 && list2){
+            if(list1->val <= list2->val){
+                temp->next = list1;
+                temp = list1;
+                list1 = list1 -> next;
+            }else{
+                temp->next = list2;
+                temp = list2;
+                list2 = list2->next;
+            }
+        }
+
+        if(list1){
+            temp->next = list1;
+        }
+
+        if(list2){
+            temp->next = list2;
+        }
+
+        return ans->next;
     }
 };
