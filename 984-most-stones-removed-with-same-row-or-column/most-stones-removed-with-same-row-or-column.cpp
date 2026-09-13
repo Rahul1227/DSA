@@ -4,8 +4,8 @@ private:
     vector<int> size;
 public:
     DisjointSet(int n){
-        parent.resize(n);
-        size.resize(n, 1);
+        parent.assign(n,0);
+        size.assign(n, 1);
         for(int i=0; i<n; i++){
             parent[i] = i;
         }
