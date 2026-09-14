@@ -11,20 +11,23 @@
  */
 class Solution {
 private:
-    int solve(TreeNode* node, int &ans){
-        if(!node) return 0;
+    int solve(TreeNode* root, int &totalSum){
+        if(!root) return 0;
 
-        int lh = solve(node->left, ans);
-        int rh = solve(node->right, ans);
+        int leftNeed = solve(root->left, totalSum);
+        int rightNeed = solve(root->right, totalSum);
 
-        ans += abs(lh) + abs(rh);
-        return lh + rh + node->val -1;
+        totalSum += abs(leftNeed) + abs(rightNeed);
+
+        return leftNeed + rightNeed + root->val -1;
+
+
     }
 public:
     int distributeCoins(TreeNode* root) {
-        int ans = 0;
-        solve(root, ans);
-        return ans;
+        int totalSum = 0;
+        solve(root, totalSum);
+        return totalSum;
         
     }
 };
