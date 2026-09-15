@@ -1,42 +1,20 @@
 class Solution {
 public:
-    static bool compare(const vector<int> &a, const vector<int> &b){
-        if(a[0] == b[0]){
-            return a[1] > b[1];
-        }
-
-        return a[0] < b[0];
-    }
     int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-        int n = intervals.size();
+        sort(intervals.begin(), intervals.end());
         int count = 0;
-        sort(intervals.begin(), intervals.end(), compare);
-        int i =0;
-        int j = 1;
-        while(j < n){
-            if(intervals[i][1] > intervals[j][0]){
-                if(intervals[i][1] > intervals[j][1]){
-                    i=j;
-                    // j++;
+        int currEnd = intervals[0][1];
 
-                }
-                // }else{
-                //     j++;
-                // }
+        for(int i=1; i<intervals.size(); i++){
+            if(intervals[i][0] < currEnd){
                 count++;
+                currEnd = min(currEnd, intervals[i][1]);
             }else{
-                i=j;
-                // j++;
+                currEnd = intervals[i][1];
             }
-
-
-            // i++;
-            j++;
         }
 
         return count;
-
-
         
     }
 };
