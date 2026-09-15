@@ -27,6 +27,7 @@ private:
 public:
     int maxPalindromes(string s, int k) {
         int n = s.size();
+        if(k == 1) return n;
 
         isPalindrome.assign(n, vector<bool>(n, false));
 
