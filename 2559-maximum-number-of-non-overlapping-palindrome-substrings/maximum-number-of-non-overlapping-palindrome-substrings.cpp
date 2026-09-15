@@ -30,15 +30,16 @@ public:
 
         isPalindrome.assign(n, vector<bool>(n, false));
 
-        // Build palindrome table
-        for (int len = 1; len <= n; len++) {
-            for (int i = 0; i + len <= n; i++) {
-
-                int j = i + len - 1;
-
-                if (s[i] == s[j] &&
-                    (len <= 2 || isPalindrome[i + 1][j - 1])) {
+        // populating isPalindrome
+        for(int len = 1; len<=n; len++){
+            for(int i=0; i+len-1<n; i++){
+                int j = i+len-1;
+                if(i ==  j){
                     isPalindrome[i][j] = true;
+                }else if(i+1 == j){
+                    isPalindrome[i][j] = s[i] == s[j];
+                }else{
+                    isPalindrome[i][j] = (s[i] == s[j] && isPalindrome[i+1][j-1]);
                 }
             }
         }
