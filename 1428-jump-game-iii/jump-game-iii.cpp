@@ -1,32 +1,31 @@
 class Solution {
 private:
-    bool solve(int i, vector<int> &arr, vector<int> &visited){
-        if(arr[i] == 0) return true;
+    bool solve(int ind, vector<int>& arr, vector<int>& visited) {
+        int n = arr.size();
 
-        int left = i - arr[i];
-        int right = i + arr[i];
-        bool forward = false;
-        bool backward = false;
+        if(ind < 0 || ind >= n) return false;
 
-        if(right < arr.size() && !visited[right]){
-            visited[right] =1;
-            forward = solve(right, arr, visited);
+        if(arr[ind] == 0) return true;
 
-        }
+        if(visited[ind]) return false;
 
-        if(left >=0 && !visited[left]){
-            visited[left] = 1;
-            backward = solve(left, arr, visited);
-        }
+        visited[ind] = 1;
 
+        bool left = solve(ind - arr[ind], arr, visited);
+        if(left) return true;
 
-        return forward || backward;
+        bool right = solve(ind + arr[ind], arr, visited);
+        if(right) return true;
+
+        return false;
     }
+
 public:
     bool canReach(vector<int>& arr, int start) {
         int n = arr.size();
+
         vector<int> visited(n, 0);
+
         return solve(start, arr, visited);
-        
     }
 };
