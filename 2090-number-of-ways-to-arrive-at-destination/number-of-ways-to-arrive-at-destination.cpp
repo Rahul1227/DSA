@@ -1,47 +1,43 @@
+using pill = pair<int,long long>;
+using pii = pair<int,int>;
+using plli = pair<long long, int>;
+const int MOD = 1e9+7;
 class Solution {
-    const int MOD = 1e9 + 7;
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
-        // creating the adjacency list
-        vector<vector<pair<int,int>>> adj(n);
-
-        for(int i =0; i<roads.size(); i++){
-            int u = roads[i][0];
-            int v = roads[i][1];
-            int w = roads[i][2];
-            adj[u].push_back({v,w});
-            adj[v].push_back({u,w}); // birectional paths
+        vector<vector<pii>> adj(n);
+        for(auto road: roads){
+            int u = road[0];
+            int v = road[1];
+            int w = road[2];
+            adj[u].push_back({v, w});
+            adj[v].push_back({u, w});
         }
 
-        vector<long long> dist(n, LLONG_MAX);
-        vector<int> count(n,0);
-        priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<pair<long long,int>>> pq;
-        pq.push({0,0}); // distance , node
-        dist[0] = 0;
-        count[0] = 1;
+        vector<pair<long long, long long>> distance(n, {LLONG_MAX,0LL});
+        priority_queue<plli, vector<plli>, greater<>> pq;
+        pq.push({0,0});
+        distance[0] = {0, 1};
 
         while(!pq.empty()){
-            auto [distance, u] = pq.top();
+            auto [currDist, u] = pq.top();
             pq.pop();
+            if(currDist > distance[u].first) continue;
 
-            if(distance > dist[u]) continue;
-
-            for(auto [v,w] : adj[u]){
-                long long newDist = distance + w;
-                if(newDist < dist[v]){
-                    dist[v] = newDist;
+            for(auto [v, w] : adj[u]){
+                long long newDist = 1LL * currDist + w;
+                if(newDist < distance[v].first){
                     pq.push({newDist, v});
-                    count[v] = count[u] % MOD;
-                }else if(newDist == dist[v]){
-                    count[v] = (count[v] + count[u]) % MOD;
+                    distance[v] = {newDist, distance[u].second};
+                }else if(newDist == distance[v].first){
+                    distance[v].second = (distance[v].second +  distance[u].second) % MOD;
                 }
             }
+
+            
         }
 
-        return count[n-1];
-
-
-
+        return distance[n-1].second;
         
     }
 };
