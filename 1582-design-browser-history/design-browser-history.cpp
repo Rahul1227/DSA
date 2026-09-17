@@ -11,7 +11,7 @@ public:
     
     void visit(string url) {
         history.resize(currInd+1);
-        history.push_back(url);
+        history.emplace_back(url);
         currInd++;
         
     }
