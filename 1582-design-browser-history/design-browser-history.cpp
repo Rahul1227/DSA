@@ -1,40 +1,30 @@
 class BrowserHistory {
 private:
-    string curr ="";
-    stack<string> history;
-    stack<string> future;
+    int currInd = -1;
+    vector<string> history;
 public:
     BrowserHistory(string homepage) {
-        curr = homepage;
+        history.push_back(homepage);
+        currInd++;
+        
     }
     
     void visit(string url) {
-        while(!future.empty()) future.pop();
-        history.push(curr);
-        curr = url;
-
+        history.resize(currInd+1);
+        history.push_back(url);
+        currInd++;
         
     }
     
     string back(int steps) {
-        while(!history.empty() && steps--){
-            future.push(curr);
-            curr = history.top();
-            history.pop();
-        }
-        return curr;
+        currInd = max(0, currInd - steps);
+        return history[currInd];
         
     }
     
     string forward(int steps) {
-        while(!future.empty() && steps--){
-            history.push(curr);
-            curr = future.top();
-            future.pop();
-        }
-
-        return curr;
-
+        currInd = min((int)history.size()-1, currInd + steps);
+        return history[currInd];
         
     }
 };
