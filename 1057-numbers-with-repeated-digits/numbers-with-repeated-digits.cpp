@@ -1,41 +1,40 @@
 class Solution {
 public:
-    //  ind, tight, mask, started, flag
-    int dp[11][2][1025][2][2];
+       // ind, tight, started, mask, count
+    int dp[12][2][2][1024][12];
 
-    int solve(string &num, int ind, int tight, int mask, int started, int flag){
-        // base case
-        if(ind == num.size()){
-            return flag;
+    int solve(int ind, bool tight, bool started, int mask, int count, string &num){
+        int n = num.size();
+        if(ind == n){
+            return count;
         }
 
-        if(dp[ind][tight][mask][started][flag] != -1){
-            return dp[ind][tight][mask][started][flag];
+        if(dp[ind][tight][started][mask][count] != -1){
+            return dp[ind][tight][started][mask][count];
         }
 
         int limit = (tight ? num[ind] -'0' : 9);
-        int ans = 0;
+        int result = 0;
 
-        for(int i =0; i<=limit; i++){
-            int updatedTight = (tight && (i == num[ind] -  '0'));
-            if(!started && i ==0){
-                ans += solve(num, ind+1, updatedTight,0,0,0);
+        for(int i=0; i<=limit; i++){
+            if(i ==0 && !started){
+                result += solve(ind+1, false, started,mask,count,num);
             }else{
-                int updatedFlag = flag || (mask & (1 << i));
-                int updatedMask = mask | (1 << i);
-                ans += solve(num, ind+1, updatedTight, updatedMask, 1, updatedFlag);
+                int newCount = (count || (mask & (1 << i)));
+                int newTight = tight && (i == num[ind]-'0');
+                int newMask = (mask | (1 << i));
+                result += solve(ind+1, newTight, true, newMask, newCount, num);
+
             }
         }
 
-
-
-        return dp[ind][tight][mask][started][flag] = ans;
+        return dp[ind][tight][started][mask][count] = result;
+        
     }
-
     int numDupDigitsAtMostN(int n) {
         string num = to_string(n);
         memset(dp, -1, sizeof(dp));
-        return solve(num,0,1,0,0,0);
+        return solve(0,true,false,0,0, num);
         
     }
 };
