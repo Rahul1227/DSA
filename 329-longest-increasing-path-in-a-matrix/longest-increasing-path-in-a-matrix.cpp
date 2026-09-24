@@ -1,6 +1,6 @@
 class Solution {
 private:
-    int solve(int r, int c, vector<vector<int>> &mat, vector<vector<int>> &dp){
+    int solve(int r, int c, vector<vector<int>> &dp, vector<vector<int>> &mat){
         int row = mat.size();
         int col = mat[0].size();
 
@@ -8,36 +8,35 @@ private:
 
         static int dirX[] = {0,0,1,-1};
         static int dirY[] = {-1,1,0,0};
-
-        int maxPath = 0;
-        for(int z =0; z<4; z++){
+        int result = 1;
+        for(int z=0; z<4; z++){
             int newR = r + dirX[z];
             int newC = c + dirY[z];
 
-            if(newR >=0 && newR < row && newC >=0 && newC < col && mat[newR][newC] > mat[r][c]){
-                maxPath =max(maxPath, 1 + solve(newR,newC,mat, dp));
+            if(newR >=0 && newR < row && newC >=0 && newC < col && mat[newR][newC] >mat[r][c]){
+                result = max(result, 1 + solve(newR, newC, dp, mat));
             }
 
         }
 
-        return dp[r][c] = maxPath;
-
+        return dp[r][c] = result;
     }
 public:
     int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int maxPath = 0;
         int row = matrix.size();
         int col = matrix[0].size();
-
         vector<vector<int>> dp(row+1, vector<int>(col+1, -1));
-        int maxPath = 0;
-        for(int i =0; i<row; i++){
-            for(int j = 0; j<col; j++){
-                int currPath = solve(i,j,matrix, dp);
-                maxPath = max(currPath, maxPath);
+
+        for(int i=0; i<row; i++){
+            for(int j =0; j<col; j++){
+               
+                int currSum = solve(i,j,dp, matrix);
+                maxPath = max(maxPath, currSum);
             }
         }
 
-        return maxPath+1;
+        return maxPath;
         
     }
 };
