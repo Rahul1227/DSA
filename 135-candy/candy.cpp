@@ -1,27 +1,37 @@
 class Solution {
 public:
     int candy(vector<int>& ratings) {
+        int ans = 1;
         int n = ratings.size();
-        vector<int> forwardPass(n, 1);
-        vector<int> backwardPass(n,1);
-
-        // forward pass
-        for(int i=1; i<n; i++){
-            if(ratings[i] > ratings[i-1]){
-                forwardPass[i] = forwardPass[i-1]+1;
+        int i =1;
+        while(i < n){
+            // equal case
+            while(i<n && ratings[i] == ratings[i-1]){
+                ans++;
+                i++;
+                
             }
-        }
 
-        // backward pass
-        for(int i=n-2; i>=0; i--){
-            if(ratings[i] > ratings[i+1]){
-                backwardPass[i] = backwardPass[i+1] +1;
+            // increasing case
+            int peak = 1;
+            while(i<n && ratings[i] > ratings[i-1]){
+                peak++;
+                ans += peak;
+                i++;
             }
-        }
 
-        int ans = 0;
-        for(int i=0; i<n; i++){
-            ans += max(forwardPass[i], backwardPass[i]);
+            int down = 1;
+            while(i<n && ratings[i] < ratings[i-1]){
+                ans += down;
+                down++;
+                i++;
+            }
+            if(down > peak){
+                ans += (down - peak);
+            }
+
+
+
         }
 
         return ans;
