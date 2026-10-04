@@ -1,30 +1,42 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        queue<pair<string,int>> q;
-        q.push({beginWord, 1});
-        unordered_set<string> st(wordList.begin(), wordList.end());
-        if(st.count(beginWord)){
-            st.erase(beginWord);
+        unordered_set<string> dict;
+        for(auto &str: wordList){
+            dict.insert(str);
         }
 
+        if(!dict.count(endWord)) return 0;
+        queue<string> q;
+        unordered_set<string> visited;
+        q.push(beginWord);
+        visited.insert(beginWord);
+
+        int count = 1;
         while(!q.empty()){
-            auto [word, level] = q.front();
-            q.pop();
-            if(word == endWord) return level;
+            int len = q.size();
+            for(int i=0; i<len; i++){
+                auto u = q.front();
+                q.pop();
+                if(u == endWord) return count;
 
-            for(int i =0; i< word.size(); i++){
-                char originalChar = word[i];
+                for(int i=0; i<u.size(); i++){
+                    for(int j=0; j<26; j++){
+                        int currChar = u[i] -'a';
+                        if(j == currChar) continue;
 
-                for(char c = 'a'; c <= 'z'; c++){
-                    word[i] = c;
-                    if(st.count(word)){
-                        q.push({word, level + 1});
-                        st.erase(word);
+                        string newWord = u;
+                        newWord[i] = j +'a';
+                        if(!dict.count(newWord)) continue;
+                        if(!visited.count(newWord)){
+                            q.push(newWord);
+                            visited.insert(newWord);
+                        }
                     }
                 }
-                word[i] = originalChar;
+
             }
+            count++;
         }
 
         return 0;
