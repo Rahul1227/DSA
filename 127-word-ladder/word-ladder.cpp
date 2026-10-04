@@ -21,18 +21,19 @@ public:
                 if(u == endWord) return count;
 
                 for(int i=0; i<u.size(); i++){
-                    for(int j=0; j<26; j++){
-                        int currChar = u[i] -'a';
-                        if(j == currChar) continue;
+                    int currChar = u[i] -'a';
+                    for(char c ='a'; c<='z'; c++){
+                       
+                        if(c == currChar) continue;
 
-                        string newWord = u;
-                        newWord[i] = j +'a';
-                        if(!dict.count(newWord)) continue;
-                        if(!visited.count(newWord)){
-                            q.push(newWord);
-                            visited.insert(newWord);
+                        u[i] = c;
+                        if(!dict.count(u)) continue;
+                        if(!visited.count(u)){
+                            q.push(u);
+                            visited.insert(u);
                         }
                     }
+                    u[i] = currChar +'a';
                 }
 
             }
