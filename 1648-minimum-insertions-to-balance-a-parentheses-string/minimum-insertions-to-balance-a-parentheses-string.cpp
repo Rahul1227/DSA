@@ -6,11 +6,12 @@ public:
         int currVal = 0;
         for(auto c: s){
             if(c =='('){
-                currVal +=2;
+                
                 if(currVal %2 == 1){
                     ans++;
                     currVal--;
                 }
+                currVal +=2;
             }else{
                 currVal--;
                 if(currVal < 0){
