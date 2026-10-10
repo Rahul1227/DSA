@@ -1,29 +1,27 @@
 class Solution {
 public:
     int minInsertions(string s) {
+        int n = s.size();
         int ans = 0;
-        int need = 0;
-
-        for (char c : s) {
-            if (c == '(') {
-                need += 2;
-
-                // We need an even number of closing brackets.
-                if (need % 2 == 1) {
+        int currVal = 0;
+        for(auto c: s){
+            if(c =='('){
+                currVal +=2;
+                if(currVal %2 == 1){
                     ans++;
-                    need--;
+                    currVal--;
                 }
-            } else {
-                need--;
-
-                // No opening bracket was available.
-                if (need < 0) {
+            }else{
+                currVal--;
+                if(currVal < 0){
                     ans++;
-                    need = 1;
+                    currVal += 2;
                 }
             }
         }
 
-        return ans + need;
+        ans += abs(currVal);
+        return ans;
+        
     }
 };
