@@ -2,40 +2,34 @@ class Solution {
 public:
     int findNumberOfLIS(vector<int>& nums) {
         int n = nums.size();
-        vector<pair<int, int>> dp(n, {1, 1});
-        int globalMaxLen = 0;
-        int globalMaxCount = 0;
+        vector<pair<int,int>> dp(n, {1,1});
 
-        for (int i = 0; i < n; i++) {
-            int maxLen = 1;
-            int maxCount = 1;
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    int currLen = dp[j].first;
-                    if (currLen + 1 > maxLen) {
-                        maxLen = currLen + 1;
-                        maxCount = dp[j].second;
-                    } else if (currLen + 1 == maxLen) {
-                        maxCount += dp[j].second;
+        for(int i=0; i<n; i++){
+            for(int j=i-1; j>=0; j--){
+                if(nums[j] < nums[i]){
+                    if(dp[j].first + 1 == dp[i].first){
+                        dp[i].second += dp[j].second;
+                    }else if(dp[j].first +1 > dp[i].first){
+                        dp[i].first = dp[j].first+1;
+                        dp[i].second = dp[j].second;
                     }
                 }
             }
+        }
 
-            dp[i] = {maxLen, maxCount};
+        int maxLen = 1;
+        int maxCount = 0;
 
-            if (maxLen > globalMaxLen) {
-                globalMaxLen = maxLen;
+        for(int i=0; i<n; i++){
+            if(dp[i].first > maxLen){
+                maxLen = dp[i].first;
+                maxCount = dp[i].second;
+            }else if(dp[i].first == maxLen){
+                maxCount += dp[i].second;
             }
         }
 
-        // cout<<globalMaxLen<<end;
-
-        for (int i = 0; i < n; i++) {
-            if (dp[i].first == globalMaxLen) {
-                globalMaxCount += dp[i].second;
-            }
-        }
-
-        return globalMaxCount;
+        return maxCount;
+        
     }
 };
