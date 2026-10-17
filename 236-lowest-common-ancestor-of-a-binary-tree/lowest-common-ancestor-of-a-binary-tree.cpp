@@ -9,31 +9,30 @@
  */
 class Solution {
 private:
-    int solve(TreeNode* root, TreeNode* p, TreeNode*q, TreeNode* &ans){
-        if(!root){
+    int solve(TreeNode* root, TreeNode*& ans, TreeNode* p, TreeNode* q) {
+        if (!root)
             return 0;
+
+        int leftCount = solve(root->left, ans, p, q);
+        int rightCount = solve(root->right, ans, p, q);
+
+        int totalCount = leftCount + rightCount;
+
+        if (root == p || root == q) {
+            totalCount++;
         }
 
-        int leftChild = solve(root->left,p,q,ans);
-        int rightChild = solve(root->right, p,q,ans);
-
-        int totalChild = leftChild + rightChild;
-
-        if(root == p || root == q){
-            totalChild++;
-        }
-
-        if(totalChild ==2 && ans == nullptr){
+        if (ans == nullptr && totalCount == 2) {
             ans = root;
         }
 
-        return totalChild;
+        return totalCount;
     }
+
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         TreeNode* ans = nullptr;
-        solve(root, p,q, ans);
+        solve(root, ans, p, q);
         return ans;
-        
     }
 };
