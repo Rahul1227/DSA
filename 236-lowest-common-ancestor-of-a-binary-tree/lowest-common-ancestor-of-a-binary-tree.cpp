@@ -10,7 +10,7 @@
 class Solution {
 private:
     int solve(TreeNode* root, TreeNode*& ans, TreeNode* p, TreeNode* q) {
-        if (!root)
+        if (!root || ans != nullptr)
             return 0;
 
         int leftCount = solve(root->left, ans, p, q);
