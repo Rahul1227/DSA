@@ -10,38 +10,17 @@
  */
 class Solution {
 private:
-    ListNode *reverse(ListNode* &prev, ListNode* &curr){
-        if(!curr) return prev;
-        ListNode * next = curr->next;
-        curr->next = prev;
-        return reverse(curr,next);
-
-
+    ListNode* solve(ListNode* currNode, ListNode* prevNode){
+        if(currNode == nullptr){
+            return prevNode;
+        }
+        ListNode* nextNode = currNode->next;
+        currNode->next = prevNode;
+        return solve(nextNode, currNode);
     }
-    
 public:
     ListNode* reverseList(ListNode* head) {
-        //trying the recursive solution
-        ListNode * prev = nullptr;
-        ListNode * curr = head;
-        return reverse(prev, curr);
-        
-
-
-
-
-
-
-        //Iterative solution
-        // ListNode * prev = nullptr;
-        // ListNode * curr = head;
-        // while(curr){
-        //     ListNode * next = curr->next;
-        //     curr->next = prev;
-        //     prev = curr;
-        //     curr = next;
-        // }
-        // return prev;
+        return solve(head, nullptr);
         
     }
 };
