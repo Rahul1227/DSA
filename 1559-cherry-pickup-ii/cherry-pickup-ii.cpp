@@ -1,62 +1,48 @@
 class Solution {
 private:
-    int solve(int r, int c1, int c2, vector<vector<vector<int>>>& dp,
-              vector<vector<int>>& grid) {
-        // base case
-        //  bound checks first
+    int solve(int r, int c1, int c2, vector<vector<int>> &grid, vector<vector<vector<int>>> &dp){
+
         int row = grid.size();
         int col = grid[0].size();
 
-        if (c1 < 0 || c1 >= col || c2 < 0 || c2 >= col){
+        if(r > row || c1 >= col || c1 < 0 || c2 >= col || c2 < 0){
             return INT_MIN;
         }
 
-        // reaching the last row
-        // if(r == row-1){
-        //     if(c1 == c2){
-        //         return grid[r][c1];
-        //     }else{
-        //         return grid[r][c1] + grid[r][c2];
-        //     }
-        // }
-
-        // simple.. think there is one more layer of all zeros
         if(r == row){
             return 0;
         }
 
-        if(dp[r][c1][c2] != -1) return dp[r][c1][c2];
-
-        int cherry = grid[r][c1];
-        if(c1 != c2){
-            cherry += grid[r][c2];
+        if(dp[r][c1][c2] != -1){
+            return dp[r][c1][c2];
         }
 
-        int maxVal = INT_MIN;
-        // checking all the direction possible
-        for(int colVal1 = -1; colVal1 <= 1; colVal1++){
-            for(int colVal2 = -1; colVal2 <= 1; colVal2++){
-                maxVal = max(maxVal, solve(r+1, c1 + colVal1, c2+colVal2, dp,grid));
+        int currGain = grid[r][c1];
+        if(c1 != c2){
+            currGain += grid[r][c2];
+        }
 
+        int res = 0;
+        for(int i=-1; i<=1; i++){
+            for(int j=-1; j<=1; j++){
+                int curr = solve(r+1, c1+i, c2+j, grid, dp);
+                if(curr == INT_MIN) continue;
+                res = max(res, curr);
             }
         }
 
-        if(maxVal != INT_MIN){
-            cherry +=maxVal;
-        }else{
-            cherry = INT_MIN;
-        }
+        return dp[r][c1][c2] = res + currGain;
 
-        return dp[r][c1][c2] = cherry;
+
+
     }
 
 public:
     int cherryPickup(vector<vector<int>>& grid) {
         int row = grid.size();
         int col = grid[0].size();
-        // row, c1, c2
-        vector<vector<vector<int>>> dp(
-            row, vector<vector<int>>(col, vector<int>(col, -1)));
-        return solve(0, 0, col-1, dp, grid);
+        vector<vector<vector<int>>> dp(row+1, vector<vector<int>>(col+1, vector<int>(col+1, -1)));
+        return solve(0, 0, col-1, grid, dp);
+        
     }
 };
