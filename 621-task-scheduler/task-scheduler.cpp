@@ -1,45 +1,58 @@
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n) {
+        n++;
         vector<int> freq(26, 0);
-        for(auto c : tasks){
+        for(auto c: tasks){
             freq[c-'A']++;
         }
-
         priority_queue<int> pq;
-        for(auto num : freq){
+        for(auto num: freq){
             if(num > 0){
                 pq.push(num);
             }
+            
         }
 
-        int time = 0;
+        int ans = 0;
         while(!pq.empty()){
             vector<int> temp;
-            for(int i =0; i<=n; i++){
-                if(!pq.empty()){
-                    int currFreq = pq.top();
-                    pq.pop();
-                    temp.push_back(--currFreq);
-                }
+            int count = 0;
+            while(!pq.empty() && count < n){
+                int topEle = pq.top();
+                temp.push_back(topEle-1);
+                pq.pop();
+                count++;
             }
 
-            for(auto f : temp){
-                if(f > 0){
-                    pq.push(f);
+            int tempSize = temp.size();
+
+            bool pushed = false;
+
+            for(int i=0; i<tempSize; i++){
+                int newVal = temp[i];
+                cout<<newVal<<" ";
+                if(newVal > 0){
+                    pq.push(newVal);
+                    pushed = true;
                 }
+
             }
 
-            if(pq.empty()){
-                time += temp.size();
+            if(pushed){
+                ans += n;
             }else{
-                time += n+1;
+                ans += tempSize;
+              
             }
+            
+
         }
 
-        return time;
+        return ans;
 
 
-        
+
+
     }
 };
