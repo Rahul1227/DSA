@@ -31,7 +31,6 @@ public:
 
             for(int i=0; i<tempSize; i++){
                 int newVal = temp[i];
-                cout<<newVal<<" ";
                 if(newVal > 0){
                     pq.push(newVal);
                     pushed = true;
