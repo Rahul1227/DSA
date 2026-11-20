@@ -17,6 +17,7 @@ public:
         for(int i=0; i<n; i++){
             if(!coins[i] && degree[i] == 1){
                 q.push(i);
+                degree[i]--;
             }
         }
 
@@ -24,13 +25,14 @@ public:
             int u = q.front();
             q.pop();
             // if(degree[u] == 0) continue;
-            degree[u]--;
+            // degree[u]--;
            
             for(auto v: adj[u]){
                 if(degree[v] == 0) continue;
                 degree[v]--;
                 if(!coins[v] && degree[v] == 1){
                     q.push(v);
+                    degree[v]--;
                 }
             }
         }
@@ -40,6 +42,7 @@ public:
             for(int i=0; i<n; i++){
                 if(degree[i] == 1){
                     q2.push(i);
+                    degree[i]--;
                 }
             }
 
@@ -47,7 +50,6 @@ public:
                 int u = q2.front();
                 q2.pop();
                 // if(degree[u] == 0) continue;
-                degree[u]--;
                 for(auto v : adj[u]){
                     if(degree[v] == 0) continue;
                     degree[v]--;
