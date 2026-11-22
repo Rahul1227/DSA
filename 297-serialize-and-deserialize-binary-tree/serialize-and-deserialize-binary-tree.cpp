@@ -8,84 +8,63 @@
  * };
  */
 class Codec {
+private:
+    void solve(TreeNode* root, string &ans){
+        ans += to_string(root->val) + "$";
+
+        // exploring the left substree
+        if(root->left){
+            solve(root->left, ans);
+        }else{
+            ans +="#$";
+        }
+
+        if(root->right){
+            solve(root->right, ans);
+        }else{
+            ans +="#$";
+        }
+
+
+    }
+
+    TreeNode* buildTree(queue<string> &q){
+        string currVal = q.front();
+        q.pop();
+        if(currVal == "#") return nullptr;
+
+        TreeNode* root = new TreeNode(stoi(currVal));
+        root->left = buildTree(q);
+        root->right = buildTree(q);
+
+        return root;
+
+
+    }
 public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(!root) return "";
-        string tree  = "";
-        queue<TreeNode*> q;
-        q.push(root);
-        while(!q.empty()){
-            auto node = q.front();
-            q.pop();
-            if(!node){
-                tree += "#,";
-                continue;
-            }
-            int val = node->val;
-            tree += to_string(val) + ',';
-            if(node->left){
-                q.push(node->left);
-            }else{
-                q.push(NULL);
-            }
+        string ans = "";
+        if(!root) return ans;
 
-            if(node->right){
-                q.push(node->right);
-            }else{
-                q.push(NULL);
-            }
-        }
-        // for(auto c : tree){
-        //     cout<<c<<" ";
-        // }
-        return tree;
+        solve(root, ans);
+        return ans;
+
         
     }
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        int n = data.size();
-        if(n == 0) return NULL;
-        queue<TreeNode*> q;
+        if(data.empty()) return nullptr;
+        queue<string> q;
         stringstream ss(data);
-        string str;
-        getline(ss, str, ',');
-        TreeNode* root = new TreeNode(stoi(str));
-        q.push(root);
-        while(!q.empty()){
-            TreeNode* node = q.front();
-            q.pop();
-            getline(ss, str, ',');
-            if(str == "#"){
-                node->left = NULL;
-            }else{
-                TreeNode* leftNode = new TreeNode(stoi(str));
-                node->left = leftNode;
-                q.push(leftNode);
-            }
-            getline(ss, str, ',');
-            if(str == "#"){
-                node->right = NULL;
-            }else{
-                TreeNode* rightNode = new TreeNode(stoi(str));
-                node->right = rightNode;
-                q.push(rightNode);
-            }
+        string word;
+        while(getline(ss, word, '$')){
+            q.push(word);
         }
 
-        
-
-
-        
-
-
-        return root;
-
-        
-
-      
+        return buildTree(q);
         
     }
 };
