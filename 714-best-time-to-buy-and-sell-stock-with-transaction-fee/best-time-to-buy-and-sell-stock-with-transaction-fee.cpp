@@ -12,9 +12,9 @@ private:
 
         int profit = 0;
         if(canBuy){
-            profit = -prices[ind] - fee + solve(ind+1, 0, prices, dp, fee);
+            profit = -prices[ind] + solve(ind+1, 0, prices, dp, fee);
         }else{
-            profit = prices[ind] + solve(ind+1, 1, prices, dp, fee);
+            profit = prices[ind] - fee + solve(ind+1, 1, prices, dp, fee);
         }
 
         return dp[ind][canBuy] = max(skip, profit);
