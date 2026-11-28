@@ -5,7 +5,7 @@ private:
         int row = grid.size();
         int col = grid[0].size();
 
-        if(r > row || c1 >= col || c1 < 0 || c2 >= col || c2 < 0){
+        if(c1 >= col || c1 < 0 || c2 >= col || c2 < 0){
             return INT_MIN;
         }
 
