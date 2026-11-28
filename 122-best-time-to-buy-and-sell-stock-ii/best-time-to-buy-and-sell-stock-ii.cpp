@@ -7,21 +7,22 @@ private:
 
         // memoization step
         if(dp[ind][buy] != -1) return dp[ind][buy];
+
+        int skip = solve(ind+1,n,buy, dp, prices);
+
+
         int profit = 0;
 
 
+
         if(buy){
-            profit = max(-prices[ind] + solve(ind+1,n,0,dp,prices),
-                            0 +  solve(ind+1,n,1,dp,prices));
+            profit = -prices[ind] + solve(ind+1,n,0,dp,prices);
 
         }else{
-            profit = max(prices[ind] +  solve(ind+1,n,1,dp,prices),
-                        0 +  solve(ind+1,n,0,dp,prices)
-            
-            );
+            profit = prices[ind] +  solve(ind+1,n,1,dp,prices);
         }
 
-        return dp[ind][buy] = profit;
+        return dp[ind][buy] = max(skip, profit);
     }
 public:
     int maxProfit(vector<int>& prices) {
