@@ -1,67 +1,61 @@
 struct TrieNode{
-    TrieNode* child[2] = {nullptr};
-  
+    TrieNode* child[2] ={nullptr};
 };
 
 class Trie{
-private:
-    TrieNode* root;
-public:
-    Trie(){
-        root = new TrieNode;
-    }
-
-    void insertNum(int num){
-        TrieNode* crawler = root;
-
-        for(int i = 31; i>=0; i--){
-            int digit =(num  >> i) & 1;
-
-            if(crawler->child[digit] == nullptr){
-                crawler->child[digit] = new TrieNode;
-            }
-            crawler = crawler->child[digit];
+    private:
+        TrieNode* root;
+    public:
+        Trie(){
+            root = new TrieNode();
         }
-    }
 
-    int getResult(int num){
-        int ans = 0;
-        TrieNode* craw = root;
-        for(int i=31; i>=0; i--){
-            int digit = (num >> i) & 1;
-            int toGet = 1 - digit;
-            if(craw->child[toGet]){
-                ans = ans | (1 << i);
-                craw = craw->child[toGet];
-            }else{
-                craw = craw ->child[digit];
+        void insertNum(int n){
+            TrieNode* crawler = root;
+            for(int i=31; i>=0; i--){
+                int val = (n>>i) & 1;
+                if(!crawler->child[val]){
+                    crawler->child[val] = new TrieNode();
+                }
+                crawler = crawler->child[val];
             }
         }
 
-        return ans;
-    }
+        int getXOR(int num){
+            TrieNode* crawler = root;
+            int ans = 0;
 
+            for(int i=31; i>=0; i--){
+                int val = (num >> i) & 1;
+                int target = 1 - val;
+                if(crawler->child[target]){
+                    ans = ans | (1 << i);
+                    crawler = crawler->child[target];
+                }else{
+                    crawler = crawler->child[val];
+                }
+            }
 
-
+            return ans;
+        }
 };
-
-
 
 class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
+
         Trie trie;
-        for(auto num : nums){
+        for(auto num: nums){
             trie.insertNum(num);
         }
 
-        int maxResult = 0;
-        for(auto num : nums){
-            int currResult = trie.getResult(num);
-            maxResult = max(maxResult, currResult);
+        int maxAns = 0;
+        for(auto num: nums){
+            int currVal = trie.getXOR(num);
+            maxAns = max(maxAns, currVal);
         }
 
-        return maxResult;
+        return maxAns;
         
     }
 };
